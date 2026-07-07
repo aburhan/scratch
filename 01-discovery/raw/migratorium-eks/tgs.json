@@ -1,0 +1,28 @@
+{
+    "TargetGroups": [
+        {
+            "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:162908504356:targetgroup/k8s-migrator-migratio-cd8df6b0cd/d502bb734ad8a81c",
+            "TargetGroupName": "k8s-migrator-migratio-cd8df6b0cd",
+            "Protocol": "HTTP",
+            "Port": 8080,
+            "VpcId": "vpc-0907eb4d2c8977ffc",
+            "HealthCheckProtocol": "HTTP",
+            "HealthCheckPort": "traffic-port",
+            "HealthCheckEnabled": true,
+            "HealthCheckIntervalSeconds": 15,
+            "HealthCheckTimeoutSeconds": 5,
+            "HealthyThresholdCount": 2,
+            "UnhealthyThresholdCount": 2,
+            "HealthCheckPath": "/healthz",
+            "Matcher": {
+                "HttpCode": "200"
+            },
+            "LoadBalancerArns": [
+                "arn:aws:elasticloadbalancing:us-east-1:162908504356:loadbalancer/app/k8s-migrator-migratio-3c3935d910/4450324bde800c86"
+            ],
+            "TargetType": "ip",
+            "ProtocolVersion": "HTTP1",
+            "IpAddressType": "ipv4"
+        }
+    ]
+}

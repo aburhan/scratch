@@ -1,0 +1,55 @@
+{
+    "nodegroup": {
+        "nodegroupName": "general-20260529025442419400000005",
+        "nodegroupArn": "arn:aws:eks:us-east-1:162908504356:nodegroup/migratorium-eks/general-20260529025442419400000005/12cf38d3-e5b2-c73d-a93f-4c409a96a10d",
+        "clusterName": "migratorium-eks",
+        "version": "1.33",
+        "releaseVersion": "1.33.11-20260520",
+        "createdAt": "2026-05-29T02:54:44.990000+00:00",
+        "modifiedAt": "2026-07-06T23:33:38.275000+00:00",
+        "status": "ACTIVE",
+        "capacityType": "ON_DEMAND",
+        "scalingConfig": {
+            "minSize": 1,
+            "maxSize": 3,
+            "desiredSize": 3
+        },
+        "instanceTypes": [
+            "m5.xlarge"
+        ],
+        "subnets": [
+            "subnet-0aadb51a3d3b23a39",
+            "subnet-0bba5f6251c2714eb",
+            "subnet-0c9aa802591e10f21"
+        ],
+        "amiType": "AL2023_x86_64_STANDARD",
+        "nodeRole": "arn:aws:iam::162908504356:role/general-eks-node-group-20260529012734534600000003",
+        "labels": {
+            "workload-class": "general"
+        },
+        "resources": {
+            "autoScalingGroups": [
+                {
+                    "name": "eks-general-20260529025442419400000005-12cf38d3-e5b2-c73d-a93f-4c409a96a10d"
+                }
+            ]
+        },
+        "health": {
+            "issues": []
+        },
+        "updateConfig": {
+            "maxUnavailablePercentage": 33
+        },
+        "launchTemplate": {
+            "name": "general-20260529013918108700000012",
+            "version": "1",
+            "id": "lt-0e2077e5efb1582f0"
+        },
+        "tags": {
+            "project": "migratorium",
+            "environment": "demo",
+            "purpose": "portage-migration-torture-test",
+            "Name": "general"
+        }
+    }
+}

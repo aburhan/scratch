@@ -1,0 +1,43 @@
+{
+    "Vpcs": [
+        {
+            "OwnerId": "162908504356",
+            "InstanceTenancy": "default",
+            "CidrBlockAssociationSet": [
+                {
+                    "AssociationId": "vpc-cidr-assoc-0e717e726cae400b2",
+                    "CidrBlock": "10.20.0.0/16",
+                    "CidrBlockState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "IsDefault": false,
+            "Tags": [
+                {
+                    "Key": "purpose",
+                    "Value": "portage-migration-torture-test"
+                },
+                {
+                    "Key": "project",
+                    "Value": "migratorium"
+                },
+                {
+                    "Key": "environment",
+                    "Value": "demo"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "migratorium-eks-vpc"
+                }
+            ],
+            "BlockPublicAccessStates": {
+                "InternetGatewayBlockMode": "off"
+            },
+            "VpcId": "vpc-0907eb4d2c8977ffc",
+            "State": "available",
+            "CidrBlock": "10.20.0.0/16",
+            "DhcpOptionsId": "dopt-0bd8007879021a12c"
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+{
+    "CacheClusters": [
+        {
+            "CacheClusterId": "retail-store-checkout-001",
+            "ClientDownloadLandingPage": "https://console.aws.amazon.com/elasticache/home#client-download:",
+            "CacheNodeType": "cache.t3.micro",
+            "Engine": "redis",
+            "EngineVersion": "4.0.10",
+            "CacheClusterStatus": "available",
+            "NumCacheNodes": 1,
+            "PreferredAvailabilityZone": "us-east-1a",
+            "CacheClusterCreateTime": "2026-05-26T14:53:17.002000+00:00",
+            "PreferredMaintenanceWindow": "wed:03:00-wed:04:00",
+            "PendingModifiedValues": {},
+            "CacheSecurityGroups": [],
+            "CacheParameterGroup": {
+                "CacheParameterGroupName": "retail-store-checkout",
+                "ParameterApplyStatus": "in-sync",
+                "CacheNodeIdsToReboot": []
+            },
+            "CacheSubnetGroupName": "retail-store-checkout",
+            "AutoMinorVersionUpgrade": true,
+            "SecurityGroups": [
+                {
+                    "SecurityGroupId": "sg-0ccd5cbe17bf83569",
+                    "Status": "active"
+                }
+            ],
+            "ReplicationGroupId": "retail-store-checkout",
+            "SnapshotRetentionLimit": 0,
+            "SnapshotWindow": "06:30-07:30",
+            "AuthTokenEnabled": false,
+            "TransitEncryptionEnabled": false,
+            "AtRestEncryptionEnabled": false,
+            "ARN": "arn:aws:elasticache:us-east-1:162908504356:cluster:retail-store-checkout-001",
+            "ReplicationGroupLogDeliveryEnabled": false,
+            "LogDeliveryConfigurations": [],
+            "NetworkType": "ipv4",
+            "IpDiscovery": "ipv4"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "logGroups": [
+        {
+            "logGroupName": "/aws/eks/migratorium-eks/cluster",
+            "creationTime": 1780018055511,
+            "retentionInDays": 90,
+            "metricFilterCount": 0,
+            "arn": "arn:aws:logs:us-east-1:162908504356:log-group:/aws/eks/migratorium-eks/cluster:*",
+            "storedBytes": 9597868975,
+            "logGroupClass": "STANDARD",
+            "logGroupArn": "arn:aws:logs:us-east-1:162908504356:log-group:/aws/eks/migratorium-eks/cluster"
+        }
+    ]
+}

@@ -1,0 +1,102 @@
+{
+    "repositories": [
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/report-operator",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/report-operator",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator",
+            "createdAt": "2026-05-29T01:27:34.942000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/status-collector",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/status-collector",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector",
+            "createdAt": "2026-05-29T01:27:35.165000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/event-store-init",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/event-store-init",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/event-store-init",
+            "createdAt": "2026-05-29T01:27:35.179000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/loadgen",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/loadgen",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen",
+            "createdAt": "2026-05-29T01:27:34.938000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/metrics-agg",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/metrics-agg",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg",
+            "createdAt": "2026-05-29T01:27:35.241000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/media-svc",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/media-svc",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc",
+            "createdAt": "2026-05-29T01:27:35.252000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:162908504356:repository/migratorium/migration-ui",
+            "registryId": "162908504356",
+            "repositoryName": "migratorium/migration-ui",
+            "repositoryUri": "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui",
+            "createdAt": "2026-05-29T01:27:35.271000+00:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        }
+    ]
+}

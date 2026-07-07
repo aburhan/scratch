@@ -1,0 +1,58 @@
+{
+    "ReplicationGroups": [
+        {
+            "ReplicationGroupId": "retail-store-checkout",
+            "Description": "retail-store-checkout",
+            "GlobalReplicationGroupInfo": {},
+            "Status": "available",
+            "PendingModifiedValues": {},
+            "MemberClusters": [
+                "retail-store-checkout-001"
+            ],
+            "NodeGroups": [
+                {
+                    "NodeGroupId": "0001",
+                    "Status": "available",
+                    "PrimaryEndpoint": {
+                        "Address": "retail-store-checkout.ut0vfs.ng.0001.use1.cache.amazonaws.com",
+                        "Port": 6379
+                    },
+                    "ReaderEndpoint": {
+                        "Address": "retail-store-checkout-ro.ut0vfs.ng.0001.use1.cache.amazonaws.com",
+                        "Port": 6379
+                    },
+                    "NodeGroupMembers": [
+                        {
+                            "CacheClusterId": "retail-store-checkout-001",
+                            "CacheNodeId": "0001",
+                            "ReadEndpoint": {
+                                "Address": "retail-store-checkout-001.ut0vfs.0001.use1.cache.amazonaws.com",
+                                "Port": 6379
+                            },
+                            "PreferredAvailabilityZone": "us-east-1a",
+                            "CurrentRole": "primary"
+                        }
+                    ]
+                }
+            ],
+            "AutomaticFailover": "disabled",
+            "MultiAZ": "disabled",
+            "SnapshotRetentionLimit": 0,
+            "SnapshotWindow": "06:30-07:30",
+            "ClusterEnabled": false,
+            "CacheNodeType": "cache.t3.micro",
+            "AuthTokenEnabled": false,
+            "TransitEncryptionEnabled": false,
+            "AtRestEncryptionEnabled": false,
+            "ARN": "arn:aws:elasticache:us-east-1:162908504356:replicationgroup:retail-store-checkout",
+            "LogDeliveryConfigurations": [],
+            "ReplicationGroupCreateTime": "2026-05-26T14:48:53.002000+00:00",
+            "DataTiering": "disabled",
+            "AutoMinorVersionUpgrade": true,
+            "NetworkType": "ipv4",
+            "IpDiscovery": "ipv4",
+            "ClusterMode": "disabled",
+            "Engine": "redis"
+        }
+    ]
+}

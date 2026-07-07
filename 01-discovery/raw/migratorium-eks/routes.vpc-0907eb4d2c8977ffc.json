@@ -1,0 +1,180 @@
+{
+    "RouteTables": [
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-0c41e7e7f7b73a694",
+                    "RouteTableId": "rtb-0393266805892199d",
+                    "SubnetId": "subnet-0f33c3b6f5bd68e8c",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-075c2f9da7c7c70e8",
+                    "RouteTableId": "rtb-0393266805892199d",
+                    "SubnetId": "subnet-0faeb2ea549b7a8ce",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-076ca12d48ce02622",
+                    "RouteTableId": "rtb-0393266805892199d",
+                    "SubnetId": "subnet-06cb715aa5471f2a1",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-0393266805892199d",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.20.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                },
+                {
+                    "DestinationCidrBlock": "0.0.0.0/0",
+                    "GatewayId": "igw-0860d87ea2506758b",
+                    "Origin": "CreateRoute",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "migratorium-eks-vpc-public"
+                },
+                {
+                    "Key": "environment",
+                    "Value": "demo"
+                },
+                {
+                    "Key": "project",
+                    "Value": "migratorium"
+                },
+                {
+                    "Key": "purpose",
+                    "Value": "portage-migration-torture-test"
+                }
+            ],
+            "VpcId": "vpc-0907eb4d2c8977ffc",
+            "OwnerId": "162908504356"
+        },
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-07bd6cc322a2c4858",
+                    "RouteTableId": "rtb-01c6c95bf56c063ca",
+                    "SubnetId": "subnet-0aadb51a3d3b23a39",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-051aa24da060fdc91",
+                    "RouteTableId": "rtb-01c6c95bf56c063ca",
+                    "SubnetId": "subnet-0c9aa802591e10f21",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-0d3d1faf9f7a76e57",
+                    "RouteTableId": "rtb-01c6c95bf56c063ca",
+                    "SubnetId": "subnet-0bba5f6251c2714eb",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-01c6c95bf56c063ca",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.20.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                },
+                {
+                    "DestinationCidrBlock": "0.0.0.0/0",
+                    "NatGatewayId": "nat-0915057c9775739f1",
+                    "Origin": "CreateRoute",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "environment",
+                    "Value": "demo"
+                },
+                {
+                    "Key": "purpose",
+                    "Value": "portage-migration-torture-test"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "migratorium-eks-vpc-private"
+                },
+                {
+                    "Key": "project",
+                    "Value": "migratorium"
+                }
+            ],
+            "VpcId": "vpc-0907eb4d2c8977ffc",
+            "OwnerId": "162908504356"
+        },
+        {
+            "Associations": [
+                {
+                    "Main": true,
+                    "RouteTableAssociationId": "rtbassoc-01d3a5d791f0991ae",
+                    "RouteTableId": "rtb-0ce641cc4a91d5367",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-0ce641cc4a91d5367",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.20.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "purpose",
+                    "Value": "portage-migration-torture-test"
+                },
+                {
+                    "Key": "environment",
+                    "Value": "demo"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "migratorium-eks-vpc-default"
+                },
+                {
+                    "Key": "project",
+                    "Value": "migratorium"
+                }
+            ],
+            "VpcId": "vpc-0907eb4d2c8977ffc",
+            "OwnerId": "162908504356"
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "addon": {
+        "addonName": "vpc-cni",
+        "clusterName": "migratorium-eks",
+        "status": "ACTIVE",
+        "addonVersion": "v1.22.1-eksbuild.2",
+        "health": {
+            "issues": []
+        },
+        "addonArn": "arn:aws:eks:us-east-1:162908504356:addon/migratorium-eks/vpc-cni/eacf38d3-e5b4-fbb1-b3bc-f212cb2525d9",
+        "createdAt": "2026-05-29T02:54:42.818000+00:00",
+        "modifiedAt": "2026-05-29T02:55:10.906000+00:00",
+        "tags": {
+            "purpose": "portage-migration-torture-test",
+            "project": "migratorium",
+            "environment": "demo"
+        },
+        "namespaceConfig": {
+            "namespace": "kube-system"
+        }
+    }
+}

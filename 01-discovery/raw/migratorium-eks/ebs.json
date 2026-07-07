@@ -1,0 +1,70 @@
+{
+    "Volumes": [
+        {
+            "AvailabilityZoneId": "use1-az1",
+            "Iops": 4000,
+            "Tags": [
+                {
+                    "Key": "kubernetes.io/created-for/pvc/namespace",
+                    "Value": "migratorium"
+                },
+                {
+                    "Key": "ebs.csi.aws.com/cluster-name",
+                    "Value": "migratorium-eks"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "migratorium-eks-dynamic-pvc-f6329c07-2b2d-4e6b-8405-085f39dc6d9d"
+                },
+                {
+                    "Key": "KubernetesCluster",
+                    "Value": "migratorium-eks"
+                },
+                {
+                    "Key": "kubernetes.io/cluster/migratorium-eks",
+                    "Value": "owned"
+                },
+                {
+                    "Key": "CSIVolumeName",
+                    "Value": "pvc-f6329c07-2b2d-4e6b-8405-085f39dc6d9d"
+                },
+                {
+                    "Key": "ebs.csi.aws.com/cluster",
+                    "Value": "true"
+                },
+                {
+                    "Key": "kubernetes.io/created-for/pv/name",
+                    "Value": "pvc-f6329c07-2b2d-4e6b-8405-085f39dc6d9d"
+                },
+                {
+                    "Key": "kubernetes.io/created-for/pvc/name",
+                    "Value": "data-event-store-0"
+                }
+            ],
+            "VolumeType": "gp3",
+            "MultiAttachEnabled": false,
+            "Throughput": 250,
+            "Operator": {
+                "Managed": false
+            },
+            "VolumeId": "vol-0c59e3c4e2179815f",
+            "Size": 20,
+            "SnapshotId": "",
+            "AvailabilityZone": "us-east-1a",
+            "State": "in-use",
+            "CreateTime": "2026-05-29T03:18:44.435000+00:00",
+            "Attachments": [
+                {
+                    "DeleteOnTermination": false,
+                    "VolumeId": "vol-0c59e3c4e2179815f",
+                    "InstanceId": "i-0ef427ee898820fb5",
+                    "Device": "/dev/xvdaa",
+                    "State": "attached",
+                    "AttachTime": "2026-05-29T03:18:48+00:00"
+                }
+            ],
+            "Encrypted": true,
+            "KmsKeyId": "arn:aws:kms:us-east-1:162908504356:key/926f2fbc-8bdf-4ec7-8030-beb27881a166"
+        }
+    ]
+}
