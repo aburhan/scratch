@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workload Handoff (Per Namespace)",
+  "description": "Per-namespace narrower version of workload-handoff.json. One file per cluster per namespace under workload-handoff/<cluster>/<namespace>/.",
+  "type": "object",
+  "required": ["run_id", "source_cluster_name", "namespace", "workloads"],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": { "type": "string" },
+    "source_cluster_name": { "type": "string" },
+    "source_region": { "type": ["string", "null"] },
+    "namespace": { "type": "string" },
+    "target_cluster_name": { "type": ["string", "null"] },
+    "target_project": { "type": ["string", "null"] },
+    "workloads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "kind", "dependencies"],
+        "properties": {
+          "name": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Deployment",
+              "StatefulSet",
+              "DaemonSet",
+              "CronJob",
+              "Job",
+              "ReplicaSet"
+            ]
+          },
+          "dependencies": {
+            "type": "object",
+            "required": [
+              "images",
+              "service_account",
+              "storage",
+              "ingresses",
+              "secrets",
+              "data_dependencies"
+            ],
+            "properties": {
+              "images": { "type": "array", "items": { "type": "string" } },
+              "irsa_role_arn": { "type": ["string", "null"] },
+              "service_account": { "type": "string" },
+              "storage": {
+                "type": "object",
+                "properties": {
+                  "pvc_names": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "rwx_file_shares": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              },
+              "ingresses": { "type": "array", "items": { "type": "string" } },
+              "secrets": { "type": "array", "items": { "type": "string" } },
+              "data_dependencies": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "autopilot_compatible": { "type": "boolean" },
+          "pod_security_baseline_passes": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
