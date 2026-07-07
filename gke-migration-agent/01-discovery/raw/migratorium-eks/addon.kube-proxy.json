@@ -1,0 +1,22 @@
+{
+    "addon": {
+        "addonName": "kube-proxy",
+        "clusterName": "migratorium-eks",
+        "status": "ACTIVE",
+        "addonVersion": "v1.33.10-eksbuild.11",
+        "health": {
+            "issues": []
+        },
+        "addonArn": "arn:aws:eks:us-east-1:162908504356:addon/migratorium-eks/kube-proxy/7ecf38d3-e5b6-8caf-6eb2-ba5a7f85b9e8",
+        "createdAt": "2026-05-29T02:54:42.780000+00:00",
+        "modifiedAt": "2026-05-29T02:54:59.885000+00:00",
+        "tags": {
+            "purpose": "portage-migration-torture-test",
+            "project": "migratorium",
+            "environment": "demo"
+        },
+        "namespaceConfig": {
+            "namespace": "kube-system"
+        }
+    }
+}

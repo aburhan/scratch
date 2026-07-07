@@ -1,0 +1,8 @@
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "AWS_Load_Balancer_Controller-20260529033523866300000002",
+            "PolicyArn": "arn:aws:iam::162908504356:policy/AWS_Load_Balancer_Controller-20260529033523866300000002"
+        }
+    ]
+}

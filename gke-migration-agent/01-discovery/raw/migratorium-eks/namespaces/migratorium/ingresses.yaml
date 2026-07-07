@@ -1,0 +1,46 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      alb.ingress.kubernetes.io/certificate-arn: ""
+      alb.ingress.kubernetes.io/conditions.migration-ui: |
+        [{"field":"http-header","httpHeaderConfig":{"httpHeaderName":"X-Demo","values":["true"]}}]
+      alb.ingress.kubernetes.io/healthcheck-path: /healthz
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/target-type: ip
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"alb.ingress.kubernetes.io/certificate-arn":"","alb.ingress.kubernetes.io/conditions.migration-ui":"[{\"field\":\"http-header\",\"httpHeaderConfig\":{\"httpHeaderName\":\"X-Demo\",\"values\":[\"true\"]}}]\n","alb.ingress.kubernetes.io/healthcheck-path":"/healthz","alb.ingress.kubernetes.io/listen-ports":"[{\"HTTP\":80},{\"HTTPS\":443}]","alb.ingress.kubernetes.io/scheme":"internet-facing","alb.ingress.kubernetes.io/ssl-redirect":"443","alb.ingress.kubernetes.io/target-type":"ip","kubernetes.io/ingress.class":"alb"},"name":"migration-ui","namespace":"migratorium"},"spec":{"rules":[{"host":null,"http":{"paths":[{"backend":{"service":{"name":"migration-ui","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      kubernetes.io/ingress.class: alb
+    creationTimestamp: "2026-05-29T03:04:43Z"
+    finalizers:
+    - ingress.k8s.aws/resources
+    generation: 4
+    name: migration-ui
+    namespace: migratorium
+    resourceVersion: "72720"
+    uid: e1904864-387a-440d-9e0e-f5c0cf697485
+  spec:
+    rules:
+    - http:
+        paths:
+        - backend:
+            service:
+              name: migration-ui
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer:
+      ingress:
+      - hostname: k8s-migrator-migratio-3c3935d910-249233888.us-east-1.elb.amazonaws.com
+        ports:
+        - port: 80
+          protocol: ""
+kind: List
+metadata:
+  resourceVersion: ""

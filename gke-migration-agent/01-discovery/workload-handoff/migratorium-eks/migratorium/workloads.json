@@ -1,0 +1,1576 @@
+{
+  "run_id": "run-001",
+  "source_cluster_name": "migratorium-eks",
+  "source_region": "us-east-1",
+  "namespace": "migratorium",
+  "target_cluster_name": null,
+  "target_project": null,
+  "workloads": [
+    {
+      "name": "fat-shard",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "busybox:1.36"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "public.ecr.aws/docker/library/busybox:1.36",
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "spread-tiny",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "busybox:1.36"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo",
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "event-store",
+      "kind": "StatefulSet",
+      "dependencies": {
+        "images": [
+          "postgres:16"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "event-store-snapshot",
+      "kind": "CronJob",
+      "dependencies": {
+        "images": [
+          "amazon/aws-cli:2.15.0"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "snapshot-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "event-store-seed",
+      "kind": "Job",
+      "dependencies": {
+        "images": [
+          "postgres:16"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "event-store-snapshot-29720340",
+      "kind": "Job",
+      "dependencies": {
+        "images": [
+          "amazon/aws-cli:2.15.0"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "snapshot-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "event-store-snapshot-29721780",
+      "kind": "Job",
+      "dependencies": {
+        "images": [
+          "amazon/aws-cli:2.15.0"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "snapshot-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "event-store-snapshot-29723220",
+      "kind": "Job",
+      "dependencies": {
+        "images": [
+          "amazon/aws-cli:2.15.0"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "snapshot-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "rds-seed",
+      "kind": "Job",
+      "dependencies": {
+        "images": [
+          "postgres:16"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "fat-shard-5cbf85488d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "busybox:1.36"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-57cbfd5ccf",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-58d5566857",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-5b5cff8f64",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-5f998c7795",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-6459487bdc",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-655655c475",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-88dcb7d8d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-b74487f99",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "loadgen-f9bcb475d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-56446dccd5",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "public.ecr.aws/docker/library/busybox:1.36",
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-5c5d4664dd",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-65d965b58",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-6655bb99b8",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-6bb5d7ddf6",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-75566979dc",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-784dd5df7d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-785c87dd9c",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "public.ecr.aws/docker/library/busybox:1.36",
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "media-svc-86d77df7df",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "public.ecr.aws/docker/library/busybox:1.36",
+          "162908504356.dkr.ecr..amazonaws.com/migratorium/media-svc:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "service_account": "media-svc",
+        "storage": {
+          "pvc_names": [
+            "media-efs-pvc"
+          ],
+          "rwx_file_shares": [
+            "fs-094d064644a3ee6b8"
+          ]
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg-5997b69b54",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg-648569f574",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg-6b8898dc4d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg-6dbbc9ccdd",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg-7958f5b5f8",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "metrics-agg-dd67687c",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d",
+        "service_account": "metrics-agg",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-546695d64d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-554886ddfb",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-57995567c6",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-5c4f5d8c6f",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-66f6d4bc4b",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-68564559",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-6f7d69568d",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-77f59c7748",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-7d8b944b94",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-86665d4f45",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "migration-ui-9bd5c5748",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "migration-ui",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator-558c4cfcfd",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator-5b58db4b7b",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator-7c9d7fffff",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator-7cd65c5dcb",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator-7d9b479bf8",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "report-operator-86546dbd7c",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "report-operator",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "spread-tiny-5f6777659c",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "busybox:1.36"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "default",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-69f5f9bbb4",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-6cd8cfdf7b",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo",
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-6f88bddc7c",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-756dfd7db",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo",
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-75c99994d5",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-768955b947",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-895c5779c",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-b999ffdcd",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo",
+          "rds:migratorium-eks-status"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "status-collector-cf757765",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011",
+        "service_account": "status-collector",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [
+          "migratorium/migration-ui"
+        ],
+        "secrets": [],
+        "data_dependencies": [
+          "secretsmanager:migratorium-eks/signing-key",
+          "s3:migratorium-eks-config-demo"
+        ]
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    }
+  ]
+}

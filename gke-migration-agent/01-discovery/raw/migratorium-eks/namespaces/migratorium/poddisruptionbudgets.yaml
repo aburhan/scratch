@@ -1,0 +1,35 @@
+apiVersion: v1
+items:
+- apiVersion: policy/v1
+  kind: PodDisruptionBudget
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"policy/v1","kind":"PodDisruptionBudget","metadata":{"annotations":{},"name":"spread-tiny-pdb","namespace":"migratorium"},"spec":{"minAvailable":3,"selector":{"matchLabels":{"app":"spread-tiny"}}}}
+    creationTimestamp: "2026-05-29T03:04:45Z"
+    generation: 1
+    name: spread-tiny-pdb
+    namespace: migratorium
+    resourceVersion: "59625"
+    uid: a80ac301-19ce-417b-acc2-a200cdc3a97a
+  spec:
+    minAvailable: 3
+    selector:
+      matchLabels:
+        app: spread-tiny
+  status:
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:04:45Z"
+      message: ""
+      observedGeneration: 1
+      reason: InsufficientPods
+      status: "False"
+      type: DisruptionAllowed
+    currentHealthy: 3
+    desiredHealthy: 3
+    disruptionsAllowed: 0
+    expectedPods: 3
+    observedGeneration: 1
+kind: List
+metadata:
+  resourceVersion: ""

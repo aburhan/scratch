@@ -1,0 +1,8 @@
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "migratorium-eks-status-collector",
+            "PolicyArn": "arn:aws:iam::162908504356:policy/migratorium-eks-status-collector"
+        }
+    ]
+}

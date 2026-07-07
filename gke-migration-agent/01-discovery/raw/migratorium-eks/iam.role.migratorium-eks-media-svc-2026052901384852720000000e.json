@@ -1,0 +1,43 @@
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "migratorium-eks-media-svc-2026052901384852720000000e",
+        "RoleId": "AROASL3Q2QESFQBMYKVX2",
+        "Arn": "arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e",
+        "CreateDate": "2026-05-29T01:38:48+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Federated": "arn:aws:iam::162908504356:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48"
+                    },
+                    "Action": "sts:AssumeRoleWithWebIdentity",
+                    "Condition": {
+                        "StringEquals": {
+                            "oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48:sub": "system:serviceaccount:migratorium:media-svc",
+                            "oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48:aud": "sts.amazonaws.com"
+                        }
+                    }
+                }
+            ]
+        },
+        "MaxSessionDuration": 3600,
+        "Tags": [
+            {
+                "Key": "purpose",
+                "Value": "portage-migration-torture-test"
+            },
+            {
+                "Key": "environment",
+                "Value": "demo"
+            },
+            {
+                "Key": "project",
+                "Value": "migratorium"
+            }
+        ],
+        "RoleLastUsed": {}
+    }
+}

@@ -1,0 +1,4255 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:45Z"
+    generation: 1
+    labels:
+      app: fat-shard
+      pod-template-hash: 5cbf85488d
+    name: fat-shard-5cbf85488d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: fat-shard
+      uid: 804bec34-9576-4ad0-b02f-e82e3aa73a88
+    resourceVersion: "19081"
+    uid: c35d444b-7dbe-429f-96a2-ddd18b9d8fce
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: fat-shard
+        pod-template-hash: 5cbf85488d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: fat-shard
+          pod-template-hash: 5cbf85488d
+      spec:
+        containers:
+        - command:
+          - sh
+          - -c
+          - sleep infinity
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: sleeper
+          resources:
+            limits:
+              cpu: "3"
+              memory: 3Gi
+            requests:
+              cpu: "3"
+              memory: 3Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-05-29T03:07:47Z"
+    generation: 3
+    labels:
+      app: loadgen
+      pod-template-hash: 57cbfd5ccf
+    name: loadgen-57cbfd5ccf
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "23827"
+    uid: db9927ca-392e-4f23-b1f6-df6b8a4143d2
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 57cbfd5ccf
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:07:45-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 57cbfd5ccf
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "9"
+    creationTimestamp: "2026-05-29T05:00:06Z"
+    generation: 2
+    labels:
+      app: loadgen
+      pod-template-hash: 58d5566857
+    name: loadgen-58d5566857
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "53367"
+    uid: c9e4cb61-7ce4-46c2-bea5-643c5dd3f13e
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 58d5566857
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 58d5566857
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-05-29T03:15:27Z"
+    generation: 3
+    labels:
+      app: loadgen
+      pod-template-hash: 5b5cff8f64
+    name: loadgen-5b5cff8f64
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "41064"
+    uid: 22021742-b274-4a66-964a-5f2723536fe9
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 5b5cff8f64
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:15:27-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 5b5cff8f64
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "7"
+    creationTimestamp: "2026-05-29T04:21:26Z"
+    generation: 3
+    labels:
+      app: loadgen
+      pod-template-hash: 5f998c7795
+    name: loadgen-5f998c7795
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "53387"
+    uid: 38ed1e97-2435-4929-b59b-6b085ec67fcd
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 5f998c7795
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T00:21:26-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 5f998c7795
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          - name: EVENT_STORE_HOST
+            value: event-store.migratorium.svc.cluster.local
+          - name: EVENT_STORE_PORT
+            value: "5432"
+          - name: EVENT_STORE_DB
+            value: events
+          - name: EVENT_STORE_USER
+            value: events
+          - name: EVENT_STORE_PASSWORD
+            value: events-demo-pw
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "6"
+    creationTimestamp: "2026-05-29T04:21:26Z"
+    generation: 2
+    labels:
+      app: loadgen
+      pod-template-hash: 6459487bdc
+    name: loadgen-6459487bdc
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "41015"
+    uid: 5f2b08f2-032c-4138-b088-6befc22a7e16
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 6459487bdc
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:15:27-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 6459487bdc
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          - name: EVENT_STORE_HOST
+            value: event-store.migratorium.svc.cluster.local
+          - name: EVENT_STORE_PORT
+            value: "5432"
+          - name: EVENT_STORE_DB
+            value: events
+          - name: EVENT_STORE_USER
+            value: events
+          - name: EVENT_STORE_PASSWORD
+            value: events-demo-pw
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:44Z"
+    generation: 2
+    labels:
+      app: loadgen
+      pod-template-hash: 655655c475
+    name: loadgen-655655c475
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "20695"
+    uid: cfcf31ac-bd85-4f85-a171-c12c7e612dad
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 655655c475
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 655655c475
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "8"
+    creationTimestamp: "2026-05-29T04:59:33Z"
+    generation: 2
+    labels:
+      app: loadgen
+      pod-template-hash: 88dcb7d8d
+    name: loadgen-88dcb7d8d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "51468"
+    uid: e91760a6-6c34-4c71-bb9e-c5b50f3915ae
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: 88dcb7d8d
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T00:21:26-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: 88dcb7d8d
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-05-29T03:13:04Z"
+    generation: 3
+    labels:
+      app: loadgen
+      pod-template-hash: b74487f99
+    name: loadgen-b74487f99
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "23896"
+    uid: 466e02b6-ae35-4e20-80b7-f9b1d4975070
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: b74487f99
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: b74487f99
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2026-05-29T03:05:55Z"
+    generation: 2
+    labels:
+      app: loadgen
+      pod-template-hash: f9bcb475d
+    name: loadgen-f9bcb475d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: loadgen
+      uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+    resourceVersion: "22908"
+    uid: 1a54c6f6-967d-4da5-a047-3e4eb8385713
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loadgen
+        pod-template-hash: f9bcb475d
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:05:55-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+          pod-template-hash: f9bcb475d
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "9"
+    creationTimestamp: "2026-05-29T05:08:49Z"
+    generation: 4
+    labels:
+      app: media-svc
+      pod-template-hash: 56446dccd5
+    name: media-svc-56446dccd5
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "54842"
+    uid: f8125897-eb17-42fe-8a2d-0706edefc48e
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 56446dccd5
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 56446dccd5
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 768Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - mkdir -p /data/media && chown -R 10001:10001 /data/media
+          image: public.ecr.aws/docker/library/busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: init-media-dir
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    availableReplicas: 3
+    fullyLabeledReplicas: 3
+    observedGeneration: 4
+    readyReplicas: 3
+    replicas: 3
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "8"
+    creationTimestamp: "2026-05-29T05:00:05Z"
+    generation: 3
+    labels:
+      app: media-svc
+      pod-template-hash: 5c5d4664dd
+    name: media-svc-5c5d4664dd
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "54541"
+    uid: de2f0469-637f-405d-b54d-e70d4f38d796
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 5c5d4664dd
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 5c5d4664dd
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 768Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "7"
+    creationTimestamp: "2026-05-29T04:59:31Z"
+    generation: 2
+    labels:
+      app: media-svc
+      pod-template-hash: 65d965b58
+    name: media-svc-65d965b58
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "51413"
+    uid: f533ea4a-15d7-455a-a6df-de035ae3c4f0
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 65d965b58
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 65d965b58
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 768Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-05-29T03:13:04Z"
+    generation: 3
+    labels:
+      app: media-svc
+      pod-template-hash: 6655bb99b8
+    name: media-svc-6655bb99b8
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "24729"
+    uid: 20f58f52-6dff-42fb-9c93-25bc37e40308
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 6655bb99b8
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 6655bb99b8
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-05-29T03:07:47Z"
+    generation: 3
+    labels:
+      app: media-svc
+      pod-template-hash: 6bb5d7ddf6
+    name: media-svc-6bb5d7ddf6
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "24613"
+    uid: cb3bec6c-bf92-4b95-b4fe-c095743e876f
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 6bb5d7ddf6
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:07:45-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 6bb5d7ddf6
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2026-05-29T03:05:55Z"
+    generation: 2
+    labels:
+      app: media-svc
+      pod-template-hash: 75566979dc
+    name: media-svc-75566979dc
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "24507"
+    uid: 982f4338-b52e-4406-9e6c-b53be98b5d03
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 75566979dc
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:05:55-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 75566979dc
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:41Z"
+    generation: 4
+    labels:
+      app: media-svc
+      pod-template-hash: 784dd5df7d
+    name: media-svc-784dd5df7d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "24381"
+    uid: d65f1550-2301-4c15-9a29-e5db8d5fd96a
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 784dd5df7d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 784dd5df7d
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 4
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "6"
+    creationTimestamp: "2026-05-29T03:17:42Z"
+    generation: 7
+    labels:
+      app: media-svc
+      pod-template-hash: 785c87dd9c
+    name: media-svc-785c87dd9c
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "54853"
+    uid: c6461049-a895-4466-94e4-3a3817ee9420
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 785c87dd9c
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 785c87dd9c
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - mkdir -p /data/media && chown -R 10001:10001 /data/media
+          image: public.ecr.aws/docker/library/busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: init-media-dir
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 7
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-05-29T03:17:21Z"
+    generation: 3
+    labels:
+      app: media-svc
+      pod-template-hash: 86d77df7df
+    name: media-svc-86d77df7df
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: media-svc
+      uid: b351168a-ae42-40b0-85ff-a3c44691a950
+    resourceVersion: "24821"
+    uid: 66438f69-b7cc-4199-bf82-3ab1418dab36
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: media-svc
+        pod-template-hash: 86d77df7df
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+          pod-template-hash: 86d77df7df
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr..amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - mkdir -p /data/media && chown -R 10001:10001 /data/media
+          image: public.ecr.aws/docker/library/busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: init-media-dir
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-05-29T03:07:47Z"
+    generation: 3
+    labels:
+      app: metrics-agg
+      pod-template-hash: 5997b69b54
+    name: metrics-agg-5997b69b54
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: metrics-agg
+      uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+    resourceVersion: "23056"
+    uid: a719b25e-49a9-4149-bede-764da1ca04b9
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: metrics-agg
+        pod-template-hash: 5997b69b54
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:07:45-04:00"
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+          pod-template-hash: 5997b69b54
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-05-29T04:59:31Z"
+    generation: 2
+    labels:
+      app: metrics-agg
+      pod-template-hash: 648569f574
+    name: metrics-agg-648569f574
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: metrics-agg
+      uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+    resourceVersion: "51456"
+    uid: abb9c0f6-d95f-4391-b62f-edeb943d6178
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: metrics-agg
+        pod-template-hash: 648569f574
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+          pod-template-hash: 648569f574
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:42Z"
+    generation: 2
+    labels:
+      app: metrics-agg
+      pod-template-hash: 6b8898dc4d
+    name: metrics-agg-6b8898dc4d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: metrics-agg
+      uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+    resourceVersion: "20725"
+    uid: 028296b3-4be3-404c-b500-48ed95b48bf7
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: metrics-agg
+        pod-template-hash: 6b8898dc4d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+          pod-template-hash: 6b8898dc4d
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "6"
+    creationTimestamp: "2026-05-29T05:00:05Z"
+    generation: 2
+    labels:
+      app: metrics-agg
+      pod-template-hash: 6dbbc9ccdd
+    name: metrics-agg-6dbbc9ccdd
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: metrics-agg
+      uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+    resourceVersion: "53357"
+    uid: c47bc892-5a1d-4eab-b3a8-e5b05bfcc581
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: metrics-agg
+        pod-template-hash: 6dbbc9ccdd
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+          pod-template-hash: 6dbbc9ccdd
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-05-29T03:13:04Z"
+    generation: 3
+    labels:
+      app: metrics-agg
+      pod-template-hash: 7958f5b5f8
+    name: metrics-agg-7958f5b5f8
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: metrics-agg
+      uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+    resourceVersion: "53388"
+    uid: 2f2e5236-3666-47ff-a567-7bc5092c2b6d
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: metrics-agg
+        pod-template-hash: 7958f5b5f8
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+          pod-template-hash: 7958f5b5f8
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2026-05-29T03:05:55Z"
+    generation: 2
+    labels:
+      app: metrics-agg
+      pod-template-hash: dd67687c
+    name: metrics-agg-dd67687c
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: metrics-agg
+      uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+    resourceVersion: "22801"
+    uid: 13957c1e-f512-4a4a-993c-f63e16297a62
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: metrics-agg
+        pod-template-hash: dd67687c
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:05:55-04:00"
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+          pod-template-hash: dd67687c
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "9"
+    creationTimestamp: "2026-05-29T06:11:36Z"
+    generation: 2
+    labels:
+      app: migration-ui
+      pod-template-hash: 546695d64d
+    name: migration-ui-546695d64d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "71792"
+    uid: df588b7c-60f7-46fe-aa57-9fc52b89777e
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 546695d64d
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:51:57-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 546695d64d
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          - name: STATUS_DB_DSN
+            value: postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=disable
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-05-29T03:13:04Z"
+    generation: 5
+    labels:
+      app: migration-ui
+      pod-template-hash: 554886ddfb
+    name: migration-ui-554886ddfb
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "53504"
+    uid: 679fcc2b-022a-4db1-ba08-ac73ef401c5a
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 554886ddfb
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 554886ddfb
+      spec:
+        containers:
+        - env:
+          - name: STATUS_API
+            value: http://status-collector:8080
+          - name: CLOUD_PROVIDER
+            value: aws
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "11"
+    creationTimestamp: "2026-05-29T06:14:38Z"
+    generation: 2
+    labels:
+      app: migration-ui
+      pod-template-hash: 57995567c6
+    name: migration-ui-57995567c6
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "72744"
+    uid: 14ccaf1a-dc1a-4f99-8d2d-16996bd7a777
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 57995567c6
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:11:37-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 57995567c6
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          - name: STATUS_DB_DSN
+            value: postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=require
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-05-29T04:59:32Z"
+    generation: 2
+    labels:
+      app: migration-ui
+      pod-template-hash: 5c4f5d8c6f
+    name: migration-ui-5c4f5d8c6f
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "51339"
+    uid: a38421d3-239a-44d5-9dbe-ee2a988cf080
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 5c4f5d8c6f
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 5c4f5d8c6f
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "13"
+    creationTimestamp: "2026-05-29T06:21:58Z"
+    generation: 2
+    labels:
+      app: migration-ui
+      pod-template-hash: 66f6d4bc4b
+    name: migration-ui-66f6d4bc4b
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "74966"
+    uid: 12f0a5f2-0e50-4afe-860a-21cbe7199fd0
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 66f6d4bc4b
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:21:58-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 66f6d4bc4b
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          - name: STATUS_DB_DSN
+            value: postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=require
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    fullyLabeledReplicas: 2
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "6"
+    creationTimestamp: "2026-05-29T05:00:05Z"
+    generation: 5
+    labels:
+      app: migration-ui
+      pod-template-hash: "68564559"
+    name: migration-ui-68564559
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "57654"
+    uid: 4366db43-3e92-4053-b83b-e1b0fb2e391e
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: "68564559"
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: "68564559"
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "7"
+    creationTimestamp: "2026-05-29T05:19:51Z"
+    generation: 4
+    labels:
+      app: migration-ui
+      pod-template-hash: 6f7d69568d
+    name: migration-ui-6f7d69568d
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "66423"
+    uid: faab28e4-9dc6-4b60-82c4-f98aaa13dbba
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 6f7d69568d
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:19:51-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 6f7d69568d
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 4
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-05-29T03:07:47Z"
+    generation: 3
+    labels:
+      app: migration-ui
+      pod-template-hash: 77f59c7748
+    name: migration-ui-77f59c7748
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "22984"
+    uid: 9e5e0ae1-8a4e-4f91-b165-eccf4e5eb67c
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 77f59c7748
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:07:45-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 77f59c7748
+      spec:
+        containers:
+        - env:
+          - name: STATUS_API
+            value: http://status-collector:8080
+          - name: CLOUD_PROVIDER
+            value: aws
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "8"
+    creationTimestamp: "2026-05-29T05:51:57Z"
+    generation: 4
+    labels:
+      app: migration-ui
+      pod-template-hash: 7d8b944b94
+    name: migration-ui-7d8b944b94
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "71901"
+    uid: 6425848a-5971-429f-b14c-f74a95affc76
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 7d8b944b94
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:51:57-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 7d8b944b94
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 4
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "10"
+    creationTimestamp: "2026-05-29T06:11:37Z"
+    generation: 5
+    labels:
+      app: migration-ui
+      pod-template-hash: 86665d4f45
+    name: migration-ui-86665d4f45
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "72839"
+    uid: beae26fe-0825-44e6-977b-47be46361d95
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 86665d4f45
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:11:37-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 86665d4f45
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          - name: STATUS_DB_DSN
+            value: postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=disable
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "12"
+    creationTimestamp: "2026-05-29T06:14:38Z"
+    generation: 5
+    labels:
+      app: migration-ui
+      pod-template-hash: 9bd5c5748
+    name: migration-ui-9bd5c5748
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: migration-ui
+      uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+    resourceVersion: "74978"
+    uid: 30d9fb4f-8f61-4f3b-b9c3-5f96555436f8
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: migration-ui
+        pod-template-hash: 9bd5c5748
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:14:38-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+          pod-template-hash: 9bd5c5748
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          - name: STATUS_DB_DSN
+            value: postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=require
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "6"
+    creationTimestamp: "2026-05-29T05:00:05Z"
+    generation: 1
+    labels:
+      app: report-operator
+      pod-template-hash: 558c4cfcfd
+    name: report-operator-558c4cfcfd
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: report-operator
+      uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+    resourceVersion: "53347"
+    uid: 0a47c608-7df5-472a-888a-f2ab2a5cebf4
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: report-operator
+        pod-template-hash: 558c4cfcfd
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-operator
+          pod-template-hash: 558c4cfcfd
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-05-29T03:07:47Z"
+    generation: 3
+    labels:
+      app: report-operator
+      pod-template-hash: 5b58db4b7b
+    name: report-operator-5b58db4b7b
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: report-operator
+      uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+    resourceVersion: "23582"
+    uid: 73ef166e-f3f5-4d32-990a-eb1439959a5a
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: report-operator
+        pod-template-hash: 5b58db4b7b
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:07:45-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-operator
+          pod-template-hash: 5b58db4b7b
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-05-29T03:15:27Z"
+    generation: 2
+    labels:
+      app: report-operator
+      pod-template-hash: 7c9d7fffff
+    name: report-operator-7c9d7fffff
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: report-operator
+      uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+    resourceVersion: "53364"
+    uid: 271a4bd0-0f57-4d23-8862-d70a6e0bd669
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: report-operator
+        pod-template-hash: 7c9d7fffff
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:15:27-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-operator
+          pod-template-hash: 7c9d7fffff
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-05-29T03:13:04Z"
+    generation: 3
+    labels:
+      app: report-operator
+      pod-template-hash: 7cd65c5dcb
+    name: report-operator-7cd65c5dcb
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: report-operator
+      uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+    resourceVersion: "23873"
+    uid: a70cc5ad-1d54-40dc-b40c-85719de9662a
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: report-operator
+        pod-template-hash: 7cd65c5dcb
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-operator
+          pod-template-hash: 7cd65c5dcb
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:43Z"
+    generation: 2
+    labels:
+      app: report-operator
+      pod-template-hash: 7d9b479bf8
+    name: report-operator-7d9b479bf8
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: report-operator
+      uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+    resourceVersion: "20704"
+    uid: fede6615-4f98-49ff-9661-bb0f5f5b3ffe
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: report-operator
+        pod-template-hash: 7d9b479bf8
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: report-operator
+          pod-template-hash: 7d9b479bf8
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2026-05-29T03:05:55Z"
+    generation: 2
+    labels:
+      app: report-operator
+      pod-template-hash: 86546dbd7c
+    name: report-operator-86546dbd7c
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: report-operator
+      uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+    resourceVersion: "22868"
+    uid: 2b94be5d-820e-4718-826f-e7731296321a
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: report-operator
+        pod-template-hash: 86546dbd7c
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:05:55-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-operator
+          pod-template-hash: 86546dbd7c
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:45Z"
+    generation: 1
+    labels:
+      app: spread-tiny
+      pod-template-hash: 5f6777659c
+    name: spread-tiny-5f6777659c
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: spread-tiny
+      uid: 32e97871-5e32-404e-8b87-d82636d18a1b
+    resourceVersion: "59626"
+    uid: 649e9b29-926d-408d-91f3-f54d8efad2ba
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: spread-tiny
+        pod-template-hash: 5f6777659c
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: spread-tiny
+          pod-template-hash: 5f6777659c
+      spec:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: spread-tiny
+              topologyKey: kubernetes.io/hostname
+        containers:
+        - command:
+          - sh
+          - -c
+          - sleep infinity
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: sleeper
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    fullyLabeledReplicas: 3
+    observedGeneration: 1
+    readyReplicas: 3
+    replicas: 3
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2026-05-29T03:05:55Z"
+    generation: 2
+    labels:
+      app: status-collector
+      pod-template-hash: 69f5f9bbb4
+    name: status-collector-69f5f9bbb4
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "23235"
+    uid: c06fe5e4-e690-4a4a-8241-a61ede555df9
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 69f5f9bbb4
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:05:55-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 69f5f9bbb4
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: DYNAMODB_TABLE
+            value: migratorium-eks-component-status
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "9"
+    creationTimestamp: "2026-05-29T06:15:37Z"
+    generation: 2
+    labels:
+      app: status-collector
+      pod-template-hash: 6cd8cfdf7b
+    name: status-collector-6cd8cfdf7b
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "73180"
+    uid: b4f17703-0551-4f72-89a3-01ba18b1dfd8
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 6cd8cfdf7b
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:15:37-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 6cd8cfdf7b
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          - name: STATUS_DB_HOST
+            value: migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com
+          - name: STATUS_DB_PORT
+            value: "5432"
+          - name: STATUS_DB_NAME
+            value: status
+          - name: STATUS_DB_USER
+            value: statusadmin
+          - name: STATUS_DB_PASSWORD
+            value: status-demo-pw
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    fullyLabeledReplicas: 2
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "4"
+    creationTimestamp: "2026-05-29T03:13:04Z"
+    generation: 5
+    labels:
+      app: status-collector
+      pod-template-hash: 6f88bddc7c
+    name: status-collector-6f88bddc7c
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "53530"
+    uid: 4f33ccc6-8d8e-4ce7-aa78-19d97796b642
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 6f88bddc7c
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 6f88bddc7c
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: DYNAMODB_TABLE
+            value: migratorium-eks-component-status
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "8"
+    creationTimestamp: "2026-05-29T06:11:26Z"
+    generation: 5
+    labels:
+      app: status-collector
+      pod-template-hash: 756dfd7db
+    name: status-collector-756dfd7db
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "73190"
+    uid: 43bb6628-3c3d-4469-8088-e31ff5995177
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 756dfd7db
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:11:26-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 756dfd7db
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          - name: STATUS_DB_HOST
+            value: migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com
+          - name: STATUS_DB_PORT
+            value: "5432"
+          - name: STATUS_DB_NAME
+            value: status
+          - name: STATUS_DB_USER
+            value: statusadmin
+          - name: STATUS_DB_PASSWORD
+            value: status-demo-pw
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "5"
+    creationTimestamp: "2026-05-29T04:59:30Z"
+    generation: 2
+    labels:
+      app: status-collector
+      pod-template-hash: 75c99994d5
+    name: status-collector-75c99994d5
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "51406"
+    uid: 062568a2-f4ce-4494-ad5a-52db99649762
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 75c99994d5
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:13:04-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 75c99994d5
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: DYNAMODB_TABLE
+            value: migratorium-eks-component-status
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "6"
+    creationTimestamp: "2026-05-29T05:00:05Z"
+    generation: 5
+    labels:
+      app: status-collector
+      pod-template-hash: 768955b947
+    name: status-collector-768955b947
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "71760"
+    uid: 29443c0d-9e80-444d-add7-46ec2cae4a1b
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 768955b947
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 768955b947
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: DYNAMODB_TABLE
+            value: migratorium-eks-component-status
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2026-05-29T03:04:41Z"
+    generation: 3
+    labels:
+      app: status-collector
+      pod-template-hash: 895c5779c
+    name: status-collector-895c5779c
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "22777"
+    uid: 036fb6e4-1282-4c14-9a2d-9143c8ecabc9
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: 895c5779c
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: 895c5779c
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: DYNAMODB_TABLE
+            value: migratorium-eks-component-status
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "7"
+    creationTimestamp: "2026-05-29T06:11:26Z"
+    generation: 2
+    labels:
+      app: status-collector
+      pod-template-hash: b999ffdcd
+    name: status-collector-b999ffdcd
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "71645"
+    uid: 731c6e86-81ca-476d-a824-5253f0dc4dcb
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: b999ffdcd
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: b999ffdcd
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          - name: STATUS_DB_HOST
+            value: migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com
+          - name: STATUS_DB_PORT
+            value: "5432"
+          - name: STATUS_DB_NAME
+            value: status
+          - name: STATUS_DB_USER
+            value: statusadmin
+          - name: STATUS_DB_PASSWORD
+            value: status-demo-pw
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "3"
+    creationTimestamp: "2026-05-29T03:07:47Z"
+    generation: 3
+    labels:
+      app: status-collector
+      pod-template-hash: cf757765
+    name: status-collector-cf757765
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: status-collector
+      uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+    resourceVersion: "23125"
+    uid: 65796e28-6cb4-44c8-b349-825c40b9d7eb
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: status-collector
+        pod-template-hash: cf757765
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-28T23:07:45-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+          pod-template-hash: cf757765
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: DYNAMODB_TABLE
+            value: migratorium-eks-component-status
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+kind: List
+metadata:
+  resourceVersion: ""

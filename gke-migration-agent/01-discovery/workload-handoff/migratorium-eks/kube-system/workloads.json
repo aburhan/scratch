@@ -1,0 +1,300 @@
+{
+  "run_id": "run-001",
+  "source_cluster_name": "migratorium-eks",
+  "source_region": "us-east-1",
+  "namespace": "kube-system",
+  "target_cluster_name": null,
+  "target_project": null,
+  "workloads": [
+    {
+      "name": "aws-load-balancer-controller",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "public.ecr.aws/eks/aws-load-balancer-controller:v3.3.0"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-lb-controller-20260529033523866100000001",
+        "service_account": "aws-load-balancer-controller",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [
+          "aws-load-balancer-tls"
+        ],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "coredns",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "coredns",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "ebs-csi-controller",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.2.0-eksbuild.4",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter:v8.5.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer:v2.1.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.60.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher:v4.11.0-eksbuild.5"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-ebs-csi-2026052901384852730000000f",
+        "service_account": "ebs-csi-controller-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [
+          "aws-secret"
+        ],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "efs-csi-controller",
+      "kind": "Deployment",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-efs-csi-driver:v3.2.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.4",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.2.0-eksbuild.3"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-efs-csi-20260529013848527400000010",
+        "service_account": "efs-csi-controller-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    },
+    {
+      "name": "aws-node",
+      "kind": "DaemonSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.22.1-eksbuild.2",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.22.1-eksbuild.2"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "aws-node",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    },
+    {
+      "name": "ebs-csi-node",
+      "kind": "DaemonSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.60.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.16.0-eksbuild.5"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "ebs-csi-node-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    },
+    {
+      "name": "ebs-csi-node-windows",
+      "kind": "DaemonSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.60.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.16.0-eksbuild.5"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "ebs-csi-node-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    },
+    {
+      "name": "efs-csi-node",
+      "kind": "DaemonSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-efs-csi-driver:v3.2.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.4",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-node-driver-registrar:v2.16.0-eksbuild.4"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-efs-csi-20260529013848527400000010",
+        "service_account": "efs-csi-node-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    },
+    {
+      "name": "kube-proxy",
+      "kind": "DaemonSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.33.10-eksbuild.11"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "kube-proxy",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    },
+    {
+      "name": "aws-load-balancer-controller-85bdbb58b6",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "public.ecr.aws/eks/aws-load-balancer-controller:v3.3.0"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-lb-controller-20260529033523866100000001",
+        "service_account": "aws-load-balancer-controller",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [
+          "aws-load-balancer-tls"
+        ],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "coredns-6b7557d946",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10"
+        ],
+        "irsa_role_arn": null,
+        "service_account": "coredns",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "ebs-csi-controller-54994b5f64",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.2.0-eksbuild.4",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-snapshotter:v8.5.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-resizer:v2.1.0-eksbuild.5",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-ebs-csi-driver:v1.60.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-attacher:v4.11.0-eksbuild.5"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-ebs-csi-2026052901384852730000000f",
+        "service_account": "ebs-csi-controller-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [
+          "aws-secret"
+        ],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": true,
+      "pod_security_baseline_passes": true
+    },
+    {
+      "name": "efs-csi-controller-8d4ddd846",
+      "kind": "ReplicaSet",
+      "dependencies": {
+        "images": [
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/aws-efs-csi-driver:v3.2.0",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/livenessprobe:v2.18.0-eksbuild.4",
+          "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/csi-provisioner:v6.2.0-eksbuild.3"
+        ],
+        "irsa_role_arn": "arn:aws:iam::162908504356:role/migratorium-eks-efs-csi-20260529013848527400000010",
+        "service_account": "efs-csi-controller-sa",
+        "storage": {
+          "pvc_names": [],
+          "rwx_file_shares": []
+        },
+        "ingresses": [],
+        "secrets": [],
+        "data_dependencies": []
+      },
+      "autopilot_compatible": false,
+      "pod_security_baseline_passes": false
+    }
+  ]
+}

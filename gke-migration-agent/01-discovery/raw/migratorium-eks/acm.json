@@ -1,0 +1,28 @@
+{
+    "CertificateSummaryList": [
+        {
+            "CertificateArn": "arn:aws:acm:us-east-2:162908504356:certificate/e8106d2a-b0db-4305-92e0-5049da136cab",
+            "DomainName": "cymbalbank.internal",
+            "SubjectAlternativeNameSummaries": [
+                "cymbalbank.internal"
+            ],
+            "HasAdditionalSubjectAlternativeNames": false,
+            "Status": "ISSUED",
+            "Type": "IMPORTED",
+            "KeyAlgorithm": "RSA-2048",
+            "KeyUsages": [
+                "ANY"
+            ],
+            "ExtendedKeyUsages": [
+                "NONE"
+            ],
+            "ExportOption": "DISABLED",
+            "InUse": false,
+            "RenewalEligibility": "INELIGIBLE",
+            "NotBefore": "2026-05-20T14:15:08+00:00",
+            "NotAfter": "2027-05-20T14:15:08+00:00",
+            "CreatedAt": "2026-05-20T14:15:17.873000+00:00",
+            "ImportedAt": "2026-05-20T14:15:17.874000+00:00"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "migratorium-eks-metrics-agg",
+            "PolicyArn": "arn:aws:iam::162908504356:policy/migratorium-eks-metrics-agg"
+        }
+    ]
+}

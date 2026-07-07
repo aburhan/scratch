@@ -1,0 +1,56 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    init.sql: |
+      CREATE TABLE IF NOT EXISTS migration_events (
+        id BIGSERIAL PRIMARY KEY, component TEXT NOT NULL,
+        from_cloud TEXT, to_cloud TEXT, phase TEXT NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now());
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"init.sql":"CREATE TABLE IF NOT EXISTS migration_events (\n  id BIGSERIAL PRIMARY KEY, component TEXT NOT NULL,\n  from_cloud TEXT, to_cloud TEXT, phase TEXT NOT NULL,\n  created_at TIMESTAMPTZ NOT NULL DEFAULT now());\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"event-store-init","namespace":"migratorium"}}
+    creationTimestamp: "2026-05-29T03:04:40Z"
+    name: event-store-init
+    namespace: migratorium
+    resourceVersion: "18785"
+    uid: 413ab778-3e8f-43e4-a380-91fa53e4fc52
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBTCCAe2gAwIBAgIIXA127jRRXvQwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+      AxMKa3ViZXJuZXRlczAeFw0yNjA1MjkwMTI4MTlaFw0zNjA1MjYwMTMzMTlaMBUx
+      EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQCxpq++3iABV0uHfMvrMssrUJRj+KShVINoiERWLHaULLGfVn4VSLD5tdsn
+      0QTkVEYBcP4P6GvXJ0V7mzTMkp3H3Kw25ErgP4DjRZ7zb/83EmaYC7GlrmMjV0EQ
+      DnHol8OSKXS+EVQYKeNypggojLG+k34JISNAirlvzviAIAFKa1Rp349ZDK9HHroG
+      rwxQ7rGOAaYYyqDmgAfPvP70XGTjt4DdAnXRRtBHAQ0CIROpvYiCoG307mlM3KWJ
+      wqgifVu73cKEfc2rBh6xi49XUISjQVtmBOVDnXirLJB/boF4rJSosEe/01fdW1M0
+      3jonLGyRIidaUhpYpMOgM92iU5FBAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQPJ9r3oNDPVo3U22tvuWOuqregbTAV
+      BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQARHMws5CLZ
+      uFMexdiOmkpV4jStP1kfRTajKAli0oAlqpMX3XriaAuR2Lmj3md4FQNGcpSNUotF
+      qKb9EcRUTtUNp/NpRTeSSMP9OA1wef/COhHOCZyhTLldn/Mwpb940Id3P2wjTcqQ
+      Ddty0DFrEvP6iLxCY4tNqDVNiXWqsAmEjkSuhZNoBXuAir0gd7czC6bvibl6OnR8
+      4n9+4AEp86ED3O8Q1hXzSoZ1L/uwaa2DMsA0Oom5sGbN1O8NG2bouXXAGLeOM2lO
+      g1AT26SORvE2JECUvYsuHXlSX5X4TJ9oibSioeyBfhOvyyimiKdH6HveAffvg4Cx
+      KNG27Iq7zxk2
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2026-05-29T03:04:04Z"
+    name: kube-root-ca.crt
+    namespace: migratorium
+    resourceVersion: "18605"
+    uid: e4b8a7e0-48c7-4281-a530-c4ed49424b68
+kind: List
+metadata:
+  resourceVersion: ""

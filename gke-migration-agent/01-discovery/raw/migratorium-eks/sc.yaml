@@ -1,0 +1,53 @@
+apiVersion: v1
+items:
+- apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"efs-sc"},"provisioner":"efs.csi.aws.com"}
+    creationTimestamp: "2026-05-29T03:04:36Z"
+    name: efs-sc
+    resourceVersion: "18747"
+    uid: 1e86cda2-fd1f-415a-bb58-913b56e53503
+  provisioner: efs.csi.aws.com
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate
+- apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"gp2"},"parameters":{"fsType":"ext4","type":"gp2"},"provisioner":"kubernetes.io/aws-ebs","volumeBindingMode":"WaitForFirstConsumer"}
+    creationTimestamp: "2026-05-29T01:34:40Z"
+    name: gp2
+    resourceVersion: "271"
+    uid: abd866f6-c884-46da-95df-c95452920088
+  parameters:
+    fsType: ext4
+    type: gp2
+  provisioner: kubernetes.io/aws-ebs
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+- allowVolumeExpansion: true
+  apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"allowVolumeExpansion":true,"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"migratorium-gp3"},"parameters":{"encrypted":"true","iops":"4000","throughput":"250","type":"gp3"},"provisioner":"ebs.csi.aws.com","reclaimPolicy":"Retain","volumeBindingMode":"WaitForFirstConsumer"}
+    creationTimestamp: "2026-05-29T03:04:36Z"
+    name: migratorium-gp3
+    resourceVersion: "18744"
+    uid: f1f04c7d-101b-40a2-a799-7bfa67deac37
+  parameters:
+    encrypted: "true"
+    iops: "4000"
+    throughput: "250"
+    type: gp3
+  provisioner: ebs.csi.aws.com
+  reclaimPolicy: Retain
+  volumeBindingMode: WaitForFirstConsumer
+kind: List
+metadata:
+  resourceVersion: ""

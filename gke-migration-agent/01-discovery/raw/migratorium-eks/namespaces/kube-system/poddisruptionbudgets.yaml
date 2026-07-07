@@ -1,0 +1,69 @@
+apiVersion: v1
+items:
+- apiVersion: policy/v1
+  kind: PodDisruptionBudget
+  metadata:
+    creationTimestamp: "2026-05-29T02:56:49Z"
+    generation: 1
+    labels:
+      eks.amazonaws.com/component: coredns
+      k8s-app: kube-dns
+    name: coredns
+    namespace: kube-system
+    resourceVersion: "16872"
+    uid: 49248222-a96b-4c30-8d63-0d0eda08d3f8
+  spec:
+    maxUnavailable: 1
+    selector:
+      matchLabels:
+        eks.amazonaws.com/component: coredns
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2026-05-29T02:58:04Z"
+      message: ""
+      observedGeneration: 1
+      reason: SufficientPods
+      status: "True"
+      type: DisruptionAllowed
+    currentHealthy: 2
+    desiredHealthy: 1
+    disruptionsAllowed: 1
+    expectedPods: 2
+    observedGeneration: 1
+- apiVersion: policy/v1
+  kind: PodDisruptionBudget
+  metadata:
+    creationTimestamp: "2026-05-29T02:57:01Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: csi-driver
+      app.kubernetes.io/managed-by: EKS
+      app.kubernetes.io/name: aws-ebs-csi-driver
+      app.kubernetes.io/version: 1.60.0
+    name: ebs-csi-controller
+    namespace: kube-system
+    resourceVersion: "16952"
+    uid: 2732af4f-87b9-43ac-b666-ecd26d1f3d7b
+  spec:
+    maxUnavailable: 1
+    selector:
+      matchLabels:
+        app: ebs-csi-controller
+        app.kubernetes.io/name: aws-ebs-csi-driver
+  status:
+    conditions:
+    - lastTransitionTime: "2026-05-29T02:58:24Z"
+      message: ""
+      observedGeneration: 1
+      reason: SufficientPods
+      status: "True"
+      type: DisruptionAllowed
+    currentHealthy: 2
+    desiredHealthy: 1
+    disruptionsAllowed: 1
+    expectedPods: 2
+    observedGeneration: 1
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,98 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-dns-egress","namespace":"migratorium"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2026-05-29T03:04:39Z"
+    generation: 1
+    name: allow-dns-egress
+    namespace: migratorium
+    resourceVersion: "18773"
+    uid: ee43f1f5-cade-4e33-8488-9b1cbc212b9e
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector: {}
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-loadgen-to-ui","namespace":"migratorium"},"spec":{"ingress":[{"from":[{"podSelector":{"matchLabels":{"app":"loadgen"}}}],"ports":[{"port":8080,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"migration-ui"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2026-05-29T03:04:39Z"
+    generation: 1
+    name: allow-loadgen-to-ui
+    namespace: migratorium
+    resourceVersion: "18774"
+    uid: 5d973f5b-5a6b-45d5-a7df-a2bc7a4ed35a
+  spec:
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: loadgen
+      ports:
+      - port: 8080
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: migration-ui
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-ui-to-collector","namespace":"migratorium"},"spec":{"ingress":[{"from":[{"podSelector":{"matchLabels":{"app":"migration-ui"}}}],"ports":[{"port":8080,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"status-collector"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2026-05-29T03:04:39Z"
+    generation: 1
+    name: allow-ui-to-collector
+    namespace: migratorium
+    resourceVersion: "18772"
+    uid: e8818b2b-6b93-4462-bec2-63f14cec1f95
+  spec:
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: migration-ui
+      ports:
+      - port: 8080
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: status-collector
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"default-deny-all","namespace":"migratorium"},"spec":{"podSelector":{},"policyTypes":["Ingress","Egress"]}}
+    creationTimestamp: "2026-05-29T03:04:38Z"
+    generation: 1
+    name: default-deny-all
+    namespace: migratorium
+    resourceVersion: "18771"
+    uid: 3737642c-d328-45c1-a40c-257637998cbd
+  spec:
+    podSelector: {}
+    policyTypes:
+    - Ingress
+    - Egress
+kind: List
+metadata:
+  resourceVersion: ""

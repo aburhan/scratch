@@ -1,0 +1,454 @@
+apiVersion: v1
+items:
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"labels":{"app":"event-store-seed"},"name":"event-store-seed","namespace":"migratorium"},"spec":{"backoffLimit":2,"template":{"metadata":{"labels":{"app":"event-store-seed"}},"spec":{"containers":[{"args":["-v","ON_ERROR_STOP=1","-c","CREATE TABLE IF NOT EXISTS migration_events (\n  id BIGSERIAL PRIMARY KEY, component TEXT NOT NULL,\n  from_cloud TEXT, to_cloud TEXT, phase TEXT NOT NULL,\n  created_at TIMESTAMPTZ NOT NULL DEFAULT now());\nINSERT INTO migration_events (component, from_cloud, to_cloud, phase, created_at)\nSELECT\n  (ARRAY['migration-ui','status-collector','media-svc','metrics-agg',\n         'report-operator','loadgen','event-store'])[1 + floor(random() * 7)::int],\n  'aws',\n  NULL,\n  (ARRAY['discovery','assessment','translation','cutover',\n         'running','traffic'])[1 + floor(random() * 6)::int],\n  now() - (random() * interval '7 days')\nFROM generate_series(1, 50000);\n"],"command":["psql"],"env":[{"name":"PGHOST","value":"event-store.migratorium.svc.cluster.local"},{"name":"PGPORT","value":"5432"},{"name":"PGDATABASE","value":"events"},{"name":"PGUSER","value":"events"},{"name":"PGPASSWORD","value":"events-demo-pw"}],"image":"postgres:16","name":"seed"}],"restartPolicy":"OnFailure"}}}}
+    creationTimestamp: "2026-05-29T04:21:10Z"
+    generation: 1
+    labels:
+      app: event-store-seed
+    name: event-store-seed
+    namespace: migratorium
+    resourceVersion: "40934"
+    uid: 08a4fd3d-f5ef-4b2f-a320-6a765c7b8c38
+  spec:
+    backoffLimit: 2
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 08a4fd3d-f5ef-4b2f-a320-6a765c7b8c38
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: event-store-seed
+          batch.kubernetes.io/controller-uid: 08a4fd3d-f5ef-4b2f-a320-6a765c7b8c38
+          batch.kubernetes.io/job-name: event-store-seed
+          controller-uid: 08a4fd3d-f5ef-4b2f-a320-6a765c7b8c38
+          job-name: event-store-seed
+      spec:
+        containers:
+        - args:
+          - -v
+          - ON_ERROR_STOP=1
+          - -c
+          - |
+            CREATE TABLE IF NOT EXISTS migration_events (
+              id BIGSERIAL PRIMARY KEY, component TEXT NOT NULL,
+              from_cloud TEXT, to_cloud TEXT, phase TEXT NOT NULL,
+              created_at TIMESTAMPTZ NOT NULL DEFAULT now());
+            INSERT INTO migration_events (component, from_cloud, to_cloud, phase, created_at)
+            SELECT
+              (ARRAY['migration-ui','status-collector','media-svc','metrics-agg',
+                     'report-operator','loadgen','event-store'])[1 + floor(random() * 7)::int],
+              'aws',
+              NULL,
+              (ARRAY['discovery','assessment','translation','cutover',
+                     'running','traffic'])[1 + floor(random() * 6)::int],
+              now() - (random() * interval '7 days')
+            FROM generate_series(1, 50000);
+          command:
+          - psql
+          env:
+          - name: PGHOST
+            value: event-store.migratorium.svc.cluster.local
+          - name: PGPORT
+            value: "5432"
+          - name: PGDATABASE
+            value: events
+          - name: PGUSER
+            value: events
+          - name: PGPASSWORD
+            value: events-demo-pw
+          image: postgres:16
+          imagePullPolicy: IfNotPresent
+          name: seed
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2026-05-29T04:21:13Z"
+    conditions:
+    - lastProbeTime: "2026-05-29T04:21:13Z"
+      lastTransitionTime: "2026-05-29T04:21:13Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2026-05-29T04:21:13Z"
+      lastTransitionTime: "2026-05-29T04:21:13Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2026-05-29T04:21:10Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2026-07-05T03:00:00Z"
+    creationTimestamp: "2026-07-05T03:00:00Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: ab894b82-fd74-4abe-b1b3-6db9f0e02c0b
+      batch.kubernetes.io/job-name: event-store-snapshot-29720340
+      controller-uid: ab894b82-fd74-4abe-b1b3-6db9f0e02c0b
+      job-name: event-store-snapshot-29720340
+    name: event-store-snapshot-29720340
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: event-store-snapshot
+      uid: 51292866-1845-40fe-94f4-aca2f5435afd
+    resourceVersion: "14236435"
+    uid: ab894b82-fd74-4abe-b1b3-6db9f0e02c0b
+  spec:
+    backoffLimit: 6
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: ab894b82-fd74-4abe-b1b3-6db9f0e02c0b
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: ab894b82-fd74-4abe-b1b3-6db9f0e02c0b
+          batch.kubernetes.io/job-name: event-store-snapshot-29720340
+          controller-uid: ab894b82-fd74-4abe-b1b3-6db9f0e02c0b
+          job-name: event-store-snapshot-29720340
+      spec:
+        containers:
+        - command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Would snapshot the event-store EBS volume here."
+            # aws ec2 create-snapshot --volume-id <vol> --description nightly
+          image: amazon/aws-cli:2.15.0
+          imagePullPolicy: IfNotPresent
+          name: snapshot
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: snapshot-sa
+        serviceAccountName: snapshot-sa
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2026-07-05T03:00:03Z"
+    conditions:
+    - lastProbeTime: "2026-07-05T03:00:03Z"
+      lastTransitionTime: "2026-07-05T03:00:03Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2026-07-05T03:00:04Z"
+      lastTransitionTime: "2026-07-05T03:00:04Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2026-07-05T03:00:00Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2026-07-06T03:00:00Z"
+    creationTimestamp: "2026-07-06T03:00:00Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 47e3907b-7539-4262-8c98-19d727a4f2ba
+      batch.kubernetes.io/job-name: event-store-snapshot-29721780
+      controller-uid: 47e3907b-7539-4262-8c98-19d727a4f2ba
+      job-name: event-store-snapshot-29721780
+    name: event-store-snapshot-29721780
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: event-store-snapshot
+      uid: 51292866-1845-40fe-94f4-aca2f5435afd
+    resourceVersion: "14620563"
+    uid: 47e3907b-7539-4262-8c98-19d727a4f2ba
+  spec:
+    backoffLimit: 6
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 47e3907b-7539-4262-8c98-19d727a4f2ba
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 47e3907b-7539-4262-8c98-19d727a4f2ba
+          batch.kubernetes.io/job-name: event-store-snapshot-29721780
+          controller-uid: 47e3907b-7539-4262-8c98-19d727a4f2ba
+          job-name: event-store-snapshot-29721780
+      spec:
+        containers:
+        - command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Would snapshot the event-store EBS volume here."
+            # aws ec2 create-snapshot --volume-id <vol> --description nightly
+          image: amazon/aws-cli:2.15.0
+          imagePullPolicy: IfNotPresent
+          name: snapshot
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: snapshot-sa
+        serviceAccountName: snapshot-sa
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2026-07-06T03:00:04Z"
+    conditions:
+    - lastProbeTime: "2026-07-06T03:00:04Z"
+      lastTransitionTime: "2026-07-06T03:00:04Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2026-07-06T03:00:04Z"
+      lastTransitionTime: "2026-07-06T03:00:04Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2026-07-06T03:00:00Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      batch.kubernetes.io/cronjob-scheduled-timestamp: "2026-07-07T03:00:00Z"
+    creationTimestamp: "2026-07-07T03:00:00Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 97430a28-17ec-4d51-a2d4-1e2c1a5446bf
+      batch.kubernetes.io/job-name: event-store-snapshot-29723220
+      controller-uid: 97430a28-17ec-4d51-a2d4-1e2c1a5446bf
+      job-name: event-store-snapshot-29723220
+    name: event-store-snapshot-29723220
+    namespace: migratorium
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: CronJob
+      name: event-store-snapshot
+      uid: 51292866-1845-40fe-94f4-aca2f5435afd
+    resourceVersion: "15004684"
+    uid: 97430a28-17ec-4d51-a2d4-1e2c1a5446bf
+  spec:
+    backoffLimit: 6
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 97430a28-17ec-4d51-a2d4-1e2c1a5446bf
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 97430a28-17ec-4d51-a2d4-1e2c1a5446bf
+          batch.kubernetes.io/job-name: event-store-snapshot-29723220
+          controller-uid: 97430a28-17ec-4d51-a2d4-1e2c1a5446bf
+          job-name: event-store-snapshot-29723220
+      spec:
+        containers:
+        - command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Would snapshot the event-store EBS volume here."
+            # aws ec2 create-snapshot --volume-id <vol> --description nightly
+          image: amazon/aws-cli:2.15.0
+          imagePullPolicy: IfNotPresent
+          name: snapshot
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: snapshot-sa
+        serviceAccountName: snapshot-sa
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2026-07-07T03:00:03Z"
+    conditions:
+    - lastProbeTime: "2026-07-07T03:00:03Z"
+      lastTransitionTime: "2026-07-07T03:00:03Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2026-07-07T03:00:03Z"
+      lastTransitionTime: "2026-07-07T03:00:03Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2026-07-07T03:00:00Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"labels":{"app":"rds-seed"},"name":"rds-seed","namespace":"migratorium"},"spec":{"backoffLimit":2,"template":{"metadata":{"labels":{"app":"rds-seed"}},"spec":{"containers":[{"args":["-v","ON_ERROR_STOP=1","-c","CREATE TABLE IF NOT EXISTS status_history (\n  id BIGSERIAL PRIMARY KEY, component_id TEXT NOT NULL,\n  cloud TEXT, phase TEXT NOT NULL,\n  observed_at TIMESTAMPTZ NOT NULL DEFAULT now());\nINSERT INTO status_history (component_id, cloud, phase, observed_at)\nSELECT\n  (ARRAY['migration-ui','status-collector','media-svc','metrics-agg',\n         'report-operator','loadgen','event-store'])[1 + floor(random() * 7)::int],\n  'aws',\n  (ARRAY['discovery','assessment','translation','cutover',\n         'running','traffic'])[1 + floor(random() * 6)::int],\n  now() - (random() * interval '7 days')\nFROM generate_series(1, 50000)\nWHERE NOT EXISTS (SELECT 1 FROM status_history);\n"],"command":["psql"],"env":[{"name":"PGHOST","value":"migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com"},{"name":"PGPORT","value":"5432"},{"name":"PGDATABASE","value":"status"},{"name":"PGUSER","value":"statusadmin"},{"name":"PGPASSWORD","value":"status-demo-pw"},{"name":"PGSSLMODE","value":"require"}],"image":"postgres:16","name":"seed"}],"restartPolicy":"OnFailure"}}}}
+    creationTimestamp: "2026-05-29T06:31:41Z"
+    generation: 1
+    labels:
+      app: rds-seed
+    name: rds-seed
+    namespace: migratorium
+    resourceVersion: "77623"
+    uid: 920d30d0-b486-4986-b900-479650f32838
+  spec:
+    backoffLimit: 2
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 920d30d0-b486-4986-b900-479650f32838
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: rds-seed
+          batch.kubernetes.io/controller-uid: 920d30d0-b486-4986-b900-479650f32838
+          batch.kubernetes.io/job-name: rds-seed
+          controller-uid: 920d30d0-b486-4986-b900-479650f32838
+          job-name: rds-seed
+      spec:
+        containers:
+        - args:
+          - -v
+          - ON_ERROR_STOP=1
+          - -c
+          - |
+            CREATE TABLE IF NOT EXISTS status_history (
+              id BIGSERIAL PRIMARY KEY, component_id TEXT NOT NULL,
+              cloud TEXT, phase TEXT NOT NULL,
+              observed_at TIMESTAMPTZ NOT NULL DEFAULT now());
+            INSERT INTO status_history (component_id, cloud, phase, observed_at)
+            SELECT
+              (ARRAY['migration-ui','status-collector','media-svc','metrics-agg',
+                     'report-operator','loadgen','event-store'])[1 + floor(random() * 7)::int],
+              'aws',
+              (ARRAY['discovery','assessment','translation','cutover',
+                     'running','traffic'])[1 + floor(random() * 6)::int],
+              now() - (random() * interval '7 days')
+            FROM generate_series(1, 50000)
+            WHERE NOT EXISTS (SELECT 1 FROM status_history);
+          command:
+          - psql
+          env:
+          - name: PGHOST
+            value: migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com
+          - name: PGPORT
+            value: "5432"
+          - name: PGDATABASE
+            value: status
+          - name: PGUSER
+            value: statusadmin
+          - name: PGPASSWORD
+            value: status-demo-pw
+          - name: PGSSLMODE
+            value: require
+          image: postgres:16
+          imagePullPolicy: IfNotPresent
+          name: seed
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    completionTime: "2026-05-29T06:31:51Z"
+    conditions:
+    - lastProbeTime: "2026-05-29T06:31:51Z"
+      lastTransitionTime: "2026-05-29T06:31:51Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2026-05-29T06:31:51Z"
+      lastTransitionTime: "2026-05-29T06:31:51Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2026-05-29T06:31:41Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+kind: List
+metadata:
+  resourceVersion: ""

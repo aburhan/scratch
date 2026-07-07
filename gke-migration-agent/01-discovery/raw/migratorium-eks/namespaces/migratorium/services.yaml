@@ -1,0 +1,181 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"event-store","namespace":"migratorium"},"spec":{"clusterIP":"None","ports":[{"port":5432,"targetPort":5432}],"selector":{"app":"event-store"}}}
+    creationTimestamp: "2026-05-29T03:04:40Z"
+    name: event-store
+    namespace: migratorium
+    resourceVersion: "18782"
+    uid: 164c1088-7bbf-4750-b74f-b4d1e72aff09
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: event-store
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"loadgen","namespace":"migratorium"},"spec":{"ports":[{"port":8080,"targetPort":8080}],"selector":{"app":"loadgen"}}}
+    creationTimestamp: "2026-05-29T03:04:44Z"
+    name: loadgen
+    namespace: migratorium
+    resourceVersion: "19002"
+    uid: 50b4cb03-d5bf-4ec9-a730-f253311f0420
+  spec:
+    clusterIP: 172.20.12.141
+    clusterIPs:
+    - 172.20.12.141
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: loadgen
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"media-svc","namespace":"migratorium"},"spec":{"ports":[{"port":8080,"targetPort":8080}],"selector":{"app":"media-svc"}}}
+    creationTimestamp: "2026-05-29T03:04:41Z"
+    name: media-svc
+    namespace: migratorium
+    resourceVersion: "18852"
+    uid: 178785a0-991e-4b9f-a175-4c834f929826
+  spec:
+    clusterIP: 172.20.110.17
+    clusterIPs:
+    - 172.20.110.17
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: media-svc
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"metrics-agg","namespace":"migratorium"},"spec":{"ports":[{"port":8080,"targetPort":8080}],"selector":{"app":"metrics-agg"}}}
+    creationTimestamp: "2026-05-29T03:04:42Z"
+    name: metrics-agg
+    namespace: migratorium
+    resourceVersion: "18882"
+    uid: eeb895b9-85e1-41d3-a363-af5c23f7f1b8
+  spec:
+    clusterIP: 172.20.195.235
+    clusterIPs:
+    - 172.20.195.235
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: metrics-agg
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"migration-ui","namespace":"migratorium"},"spec":{"ports":[{"port":80,"targetPort":8080}],"selector":{"app":"migration-ui"},"type":"NodePort"}}
+    creationTimestamp: "2026-05-29T03:04:43Z"
+    name: migration-ui
+    namespace: migratorium
+    resourceVersion: "18962"
+    uid: 620580dc-ed56-4629-925f-e4abe836b530
+  spec:
+    clusterIP: 172.20.212.44
+    clusterIPs:
+    - 172.20.212.44
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 30130
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: migration-ui
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"status-collector","namespace":"migratorium"},"spec":{"ports":[{"port":8080,"targetPort":8080}],"selector":{"app":"status-collector"}}}
+    creationTimestamp: "2026-05-29T03:04:41Z"
+    name: status-collector
+    namespace: migratorium
+    resourceVersion: "18817"
+    uid: 745448aa-c745-461f-bb65-aa91f08d8441
+  spec:
+    clusterIP: 172.20.100.96
+    clusterIPs:
+    - 172.20.100.96
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: status-collector
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

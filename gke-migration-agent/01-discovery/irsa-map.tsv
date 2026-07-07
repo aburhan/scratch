@@ -1,0 +1,8 @@
+migratorium-eks	kube-system	aws-load-balancer-controller	arn:aws:iam::162908504356:role/migratorium-eks-lb-controller-20260529033523866100000001	irsa
+migratorium-eks	kube-system	ebs-csi-controller-sa	arn:aws:iam::162908504356:role/migratorium-eks-ebs-csi-2026052901384852730000000f	irsa
+migratorium-eks	kube-system	efs-csi-controller-sa	arn:aws:iam::162908504356:role/migratorium-eks-efs-csi-20260529013848527400000010	irsa
+migratorium-eks	kube-system	efs-csi-node-sa	arn:aws:iam::162908504356:role/migratorium-eks-efs-csi-20260529013848527400000010	irsa
+migratorium-eks	migratorium	media-svc	arn:aws:iam::162908504356:role/migratorium-eks-media-svc-2026052901384852720000000e	irsa
+migratorium-eks	migratorium	metrics-agg	arn:aws:iam::162908504356:role/migratorium-eks-metrics-agg-2026052901384852460000000d	irsa
+migratorium-eks	migratorium	snapshot-sa	arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011	irsa
+migratorium-eks	migratorium	status-collector	arn:aws:iam::162908504356:role/migratorium-eks-status-collector-20260529013848527500000011	irsa

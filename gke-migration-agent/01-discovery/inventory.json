@@ -1,0 +1,110 @@
+{
+  "captured_at": "2026-07-07T17:31:51.752912Z",
+  "run_id": "run-001",
+  "source_aws": {
+    "accounts": [
+      "162908504356"
+    ],
+    "regions": [
+      "us-east-1"
+    ],
+    "auth_mechanism": "mfa",
+    "expected_session_expiry": null,
+    "re_auth_command": null,
+    "namespace_filter": {
+      "namespaces": [
+        "*"
+      ],
+      "exclude_system_namespaces": false,
+      "system_namespaces_excluded": []
+    }
+  },
+  "clusters": [
+    {
+      "name": "migratorium-eks",
+      "arn": "arn:aws:eks:us-east-1:162908504356:cluster/migratorium-eks",
+      "region": "us-east-1",
+      "account": "162908504356",
+      "version": "1.33",
+      "platform_version": "eks.39",
+      "status": "ACTIVE",
+      "auth_mode": "API_AND_CONFIG_MAP",
+      "oidc_issuer": "https://oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48",
+      "tags": {},
+      "secret_count": 2,
+      "irsa_binding_count": 8,
+      "node_count": 4,
+      "node_pools": [
+        {
+          "name": "general-20260529025442419400000005",
+          "instance_types": [
+            "m5.xlarge"
+          ],
+          "desired_size": 3,
+          "min_size": 1,
+          "max_size": 3,
+          "capacity_type": "ON_DEMAND",
+          "ami_type": "AL2023_x86_64_STANDARD",
+          "tags": {
+            "project": "migratorium",
+            "environment": "demo",
+            "purpose": "portage-migration-torture-test",
+            "Name": "general"
+          },
+          "labels": {
+            "workload-class": "general"
+          },
+          "taints": []
+        },
+        {
+          "name": "dedicated-20260529025442419400000003",
+          "instance_types": [
+            "m5.large"
+          ],
+          "desired_size": 1,
+          "min_size": 1,
+          "max_size": 2,
+          "capacity_type": "ON_DEMAND",
+          "ami_type": "AL2023_x86_64_STANDARD",
+          "tags": {
+            "project": "migratorium",
+            "environment": "demo",
+            "purpose": "portage-migration-torture-test",
+            "Name": "dedicated"
+          },
+          "labels": {
+            "workload-class": "metrics-dedicated"
+          },
+          "taints": [
+            {
+              "key": "dedicated",
+              "value": "metrics",
+              "effect": "NO_SCHEDULE"
+            }
+          ]
+        }
+      ],
+      "public_access": true,
+      "private_access": true,
+      "vpc_id": "vpc-0907eb4d2c8977ffc",
+      "subnets": [
+        "subnet-0aadb51a3d3b23a39",
+        "subnet-0bba5f6251c2714eb",
+        "subnet-0c9aa802591e10f21"
+      ],
+      "service_cidr": "172.20.0.0/16",
+      "cni_plugin": "vpc-cni",
+      "dns_provider": "coredns",
+      "external_snat": false,
+      "escalations": []
+    }
+  ],
+  "summary": {
+    "total_clusters": 1,
+    "total_irsa_bindings": 8,
+    "total_secrets": 2,
+    "total_nodes": 4,
+    "blockers_count": 0
+  },
+  "escalations": []
+}

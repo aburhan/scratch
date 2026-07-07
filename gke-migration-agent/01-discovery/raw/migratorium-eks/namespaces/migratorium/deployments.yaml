@@ -1,0 +1,741 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"fat-shard"},"name":"fat-shard","namespace":"migratorium"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"fat-shard"}},"template":{"metadata":{"labels":{"app":"fat-shard"}},"spec":{"containers":[{"command":["sh","-c","sleep infinity"],"image":"busybox:1.36","name":"sleeper","resources":{"limits":{"cpu":"3","memory":"3Gi"},"requests":{"cpu":"3","memory":"3Gi"}}}]}}}}
+    creationTimestamp: "2026-05-29T03:04:45Z"
+    generation: 1
+    labels:
+      app: fat-shard
+    name: fat-shard
+    namespace: migratorium
+    resourceVersion: "19082"
+    uid: 804bec34-9576-4ad0-b02f-e82e3aa73a88
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: fat-shard
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: fat-shard
+      spec:
+        containers:
+        - command:
+          - sh
+          - -c
+          - sleep infinity
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: sleeper
+          resources:
+            limits:
+              cpu: "3"
+              memory: 3Gi
+            requests:
+              cpu: "3"
+              memory: 3Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:04:46Z"
+      lastUpdateTime: "2026-05-29T03:04:46Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:45Z"
+      lastUpdateTime: "2026-05-29T03:04:46Z"
+      message: ReplicaSet "fat-shard-5cbf85488d" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "9"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"loadgen"},"name":"loadgen","namespace":"migratorium"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"loadgen"}},"template":{"metadata":{"labels":{"app":"loadgen"}},"spec":{"containers":[{"env":[{"name":"TARGET_URL","value":"http://migration-ui"},{"name":"CYCLE_SECONDS","value":"600"},{"name":"BASE_RPS","value":"5"},{"name":"PEAK_RPS","value":"40"},{"name":"BURST_PER_HOUR","value":"12"},{"name":"BURST_PEAK_RPS","value":"80"},{"name":"BURST_SECONDS","value":"120"},{"name":"ENDPOINT_WEIGHTS","value":"/:2,/api/status:4,/work?n=400000:4"}],"image":"162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest","name":"loadgen","ports":[{"containerPort":8080}],"readinessProbe":{"httpGet":{"path":"/healthz","port":8080}},"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}}}],"serviceAccountName":"migration-ui"}}}}
+    creationTimestamp: "2026-05-29T03:04:44Z"
+    generation: 9
+    labels:
+      app: loadgen
+    name: loadgen
+    namespace: migratorium
+    resourceVersion: "53389"
+    uid: 0c7ac440-3dae-44c6-860d-bde382b7b197
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: loadgen
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: loadgen
+      spec:
+        containers:
+        - env:
+          - name: TARGET_URL
+            value: http://migration-ui
+          - name: CYCLE_SECONDS
+            value: "600"
+          - name: BASE_RPS
+            value: "5"
+          - name: PEAK_RPS
+            value: "40"
+          - name: BURST_PER_HOUR
+            value: "12"
+          - name: BURST_PEAK_RPS
+            value: "80"
+          - name: BURST_SECONDS
+            value: "120"
+          - name: ENDPOINT_WEIGHTS
+            value: /:2,/api/status:4,/work?n=400000:4
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/loadgen:latest
+          imagePullPolicy: Always
+          name: loadgen
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:15:30Z"
+      lastUpdateTime: "2026-05-29T03:15:30Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:44Z"
+      lastUpdateTime: "2026-05-29T05:05:13Z"
+      message: ReplicaSet "loadgen-58d5566857" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 9
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "9"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"media-svc"},"name":"media-svc","namespace":"migratorium"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"media-svc"}},"template":{"metadata":{"labels":{"app":"media-svc"}},"spec":{"containers":[{"env":[{"name":"MEDIA_DIR","value":"/data/media"}],"image":"162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest","name":"media-svc","ports":[{"containerPort":8080}],"readinessProbe":{"httpGet":{"path":"/healthz","port":8080}},"resources":{"limits":{"cpu":"1","memory":"768Mi"},"requests":{"cpu":"250m","memory":"512Mi"}},"volumeMounts":[{"mountPath":"/data","name":"media"}]}],"initContainers":[{"command":["sh","-c","mkdir -p /data/media \u0026\u0026 chown -R 10001:10001 /data/media"],"image":"public.ecr.aws/docker/library/busybox:1.36","name":"init-media-dir","volumeMounts":[{"mountPath":"/data","name":"media"}]}],"serviceAccountName":"media-svc","volumes":[{"name":"media","persistentVolumeClaim":{"claimName":"media-efs-pvc"}}]}}}}
+    creationTimestamp: "2026-05-29T03:04:41Z"
+    generation: 9
+    labels:
+      app: media-svc
+    name: media-svc
+    namespace: migratorium
+    resourceVersion: "54854"
+    uid: b351168a-ae42-40b0-85ff-a3c44691a950
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: media-svc
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: media-svc
+      spec:
+        containers:
+        - env:
+          - name: MEDIA_DIR
+            value: /data/media
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/media-svc:latest
+          imagePullPolicy: Always
+          name: media-svc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 768Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - mkdir -p /data/media && chown -R 10001:10001 /data/media
+          image: public.ecr.aws/docker/library/busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: init-media-dir
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: media
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: media-svc
+        serviceAccountName: media-svc
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-efs-pvc
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:18:26Z"
+      lastUpdateTime: "2026-05-29T03:18:26Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:41Z"
+      lastUpdateTime: "2026-05-29T05:09:32Z"
+      message: ReplicaSet "media-svc-56446dccd5" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 9
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "6"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"metrics-agg"},"name":"metrics-agg","namespace":"migratorium"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"metrics-agg"}},"template":{"metadata":{"labels":{"app":"metrics-agg"}},"spec":{"containers":[{"env":[{"name":"CLOUD_PROVIDER","value":"aws"},{"name":"AWS_REGION","value":"us-east-1"}],"image":"162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest","name":"metrics-agg","ports":[{"containerPort":8080}],"readinessProbe":{"httpGet":{"path":"/healthz","port":8080}},"resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"200m","memory":"256Mi"}}}],"nodeSelector":{"workload-class":"metrics-dedicated"},"serviceAccountName":"metrics-agg","tolerations":[{"effect":"NoSchedule","key":"dedicated","operator":"Equal","value":"metrics"}]}}}}
+    creationTimestamp: "2026-05-29T03:04:42Z"
+    generation: 6
+    labels:
+      app: metrics-agg
+    name: metrics-agg
+    namespace: migratorium
+    resourceVersion: "53390"
+    uid: 563c098e-f450-443f-b315-2835a8ac2fa2
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: metrics-agg
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: metrics-agg
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: AWS_REGION
+            value: us-east-1
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/metrics-agg:latest
+          imagePullPolicy: Always
+          name: metrics-agg
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          workload-class: metrics-dedicated
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: metrics-agg
+        serviceAccountName: metrics-agg
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: metrics
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:13:09Z"
+      lastUpdateTime: "2026-05-29T03:13:09Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:42Z"
+      lastUpdateTime: "2026-05-29T05:05:13Z"
+      message: ReplicaSet "metrics-agg-6dbbc9ccdd" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 6
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "13"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"migration-ui"},"name":"migration-ui","namespace":"migratorium"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"migration-ui"}},"template":{"metadata":{"labels":{"app":"migration-ui"}},"spec":{"containers":[{"env":[{"name":"EVENT_STORE_DSN","value":"postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable"},{"name":"STATUS_DB_DSN","value":"postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=require"}],"image":"162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest","name":"migration-ui","ports":[{"containerPort":8080}],"readinessProbe":{"httpGet":{"path":"/healthz","port":8080}},"resources":{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}}],"serviceAccountName":"migration-ui"}}}}
+    creationTimestamp: "2026-05-29T03:04:43Z"
+    generation: 13
+    labels:
+      app: migration-ui
+    name: migration-ui
+    namespace: migratorium
+    resourceVersion: "74979"
+    uid: 7e18ec92-bd08-43cf-8ca8-f97d0b8aa223
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: migration-ui
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:21:58-04:00"
+        creationTimestamp: null
+        labels:
+          app: migration-ui
+      spec:
+        containers:
+        - env:
+          - name: EVENT_STORE_DSN
+            value: postgres://events:events-demo-pw@event-store.migratorium.svc.cluster.local:5432/events?sslmode=disable
+          - name: STATUS_DB_DSN
+            value: postgres://statusadmin:status-demo-pw@migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com:5432/status?sslmode=require
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/migration-ui:latest
+          imagePullPolicy: Always
+          name: migration-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: migration-ui
+        serviceAccountName: migration-ui
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:13:06Z"
+      lastUpdateTime: "2026-05-29T03:13:06Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:43Z"
+      lastUpdateTime: "2026-05-29T06:22:04Z"
+      message: ReplicaSet "migration-ui-66f6d4bc4b" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 13
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "6"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"report-operator"},"name":"report-operator","namespace":"migratorium"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"report-operator"}},"template":{"metadata":{"labels":{"app":"report-operator"}},"spec":{"containers":[{"image":"162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest","name":"report-operator","resources":{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"50m","memory":"64Mi"}}}],"serviceAccountName":"report-operator"}}}}
+    creationTimestamp: "2026-05-29T03:04:43Z"
+    generation: 6
+    labels:
+      app: report-operator
+    name: report-operator
+    namespace: migratorium
+    resourceVersion: "53368"
+    uid: dff03a7c-ecc1-423e-a61e-1a5ff461a55c
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: report-operator
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T01:00:05-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-operator
+      spec:
+        containers:
+        - image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/report-operator:latest
+          imagePullPolicy: Always
+          name: report-operator
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: report-operator
+        serviceAccountName: report-operator
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:14:39Z"
+      lastUpdateTime: "2026-05-29T03:14:39Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:43Z"
+      lastUpdateTime: "2026-05-29T05:05:13Z"
+      message: ReplicaSet "report-operator-558c4cfcfd" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 6
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"spread-tiny"},"name":"spread-tiny","namespace":"migratorium"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"spread-tiny"}},"template":{"metadata":{"labels":{"app":"spread-tiny"}},"spec":{"affinity":{"podAntiAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":[{"labelSelector":{"matchLabels":{"app":"spread-tiny"}},"topologyKey":"kubernetes.io/hostname"}]}},"containers":[{"command":["sh","-c","sleep infinity"],"image":"busybox:1.36","name":"sleeper","resources":{"limits":{"cpu":"100m","memory":"64Mi"},"requests":{"cpu":"50m","memory":"32Mi"}}}]}}}}
+    creationTimestamp: "2026-05-29T03:04:45Z"
+    generation: 1
+    labels:
+      app: spread-tiny
+    name: spread-tiny
+    namespace: migratorium
+    resourceVersion: "59627"
+    uid: 32e97871-5e32-404e-8b87-d82636d18a1b
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: spread-tiny
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: spread-tiny
+      spec:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: spread-tiny
+              topologyKey: kubernetes.io/hostname
+        containers:
+        - command:
+          - sh
+          - -c
+          - sleep infinity
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: sleeper
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2026-05-29T05:26:59Z"
+      lastUpdateTime: "2026-05-29T05:26:59Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T05:26:59Z"
+      lastUpdateTime: "2026-05-29T05:26:59Z"
+      message: ReplicaSet "spread-tiny-5f6777659c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "9"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"status-collector"},"name":"status-collector","namespace":"migratorium"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"status-collector"}},"template":{"metadata":{"labels":{"app":"status-collector"}},"spec":{"containers":[{"env":[{"name":"CLOUD_PROVIDER","value":"aws"},{"name":"CONFIG_BUCKET","value":"migratorium-eks-config-demo"},{"name":"AWS_REGION","value":"us-east-1"},{"name":"SIGNING_KEY_ARN","value":"arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf"},{"name":"STATUS_DB_HOST","value":"migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com"},{"name":"STATUS_DB_PORT","value":"5432"},{"name":"STATUS_DB_NAME","value":"status"},{"name":"STATUS_DB_USER","value":"statusadmin"},{"name":"STATUS_DB_PASSWORD","value":"status-demo-pw"}],"image":"162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest","name":"status-collector","ports":[{"containerPort":8080}],"readinessProbe":{"httpGet":{"path":"/healthz","port":8080}},"resources":{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"200m","memory":"128Mi"}}}],"serviceAccountName":"status-collector"}}}}
+    creationTimestamp: "2026-05-29T03:04:41Z"
+    generation: 9
+    labels:
+      app: status-collector
+    name: status-collector
+    namespace: migratorium
+    resourceVersion: "73191"
+    uid: 1566db0a-97f3-4744-8954-581f2fbb8db6
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: status-collector
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2026-05-29T02:15:37-04:00"
+        creationTimestamp: null
+        labels:
+          app: status-collector
+      spec:
+        containers:
+        - env:
+          - name: CLOUD_PROVIDER
+            value: aws
+          - name: CONFIG_BUCKET
+            value: migratorium-eks-config-demo
+          - name: AWS_REGION
+            value: us-east-1
+          - name: SIGNING_KEY_ARN
+            value: arn:aws:secretsmanager:us-east-1:162908504356:secret:migratorium-eks/signing-key-7hBtTf
+          - name: STATUS_DB_HOST
+            value: migratorium-eks-status.cu7se60mkmzz.us-east-1.rds.amazonaws.com
+          - name: STATUS_DB_PORT
+            value: "5432"
+          - name: STATUS_DB_NAME
+            value: status
+          - name: STATUS_DB_USER
+            value: statusadmin
+          - name: STATUS_DB_PASSWORD
+            value: status-demo-pw
+          image: 162908504356.dkr.ecr.us-east-1.amazonaws.com/migratorium/status-collector:latest
+          imagePullPolicy: Always
+          name: status-collector
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: status-collector
+        serviceAccountName: status-collector
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2026-05-29T03:13:16Z"
+      lastUpdateTime: "2026-05-29T03:13:16Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-05-29T03:04:41Z"
+      lastUpdateTime: "2026-05-29T06:15:43Z"
+      message: ReplicaSet "status-collector-6cd8cfdf7b" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 9
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+kind: List
+metadata:
+  resourceVersion: ""

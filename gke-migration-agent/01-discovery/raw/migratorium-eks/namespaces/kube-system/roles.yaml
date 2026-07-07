@@ -1,0 +1,723 @@
+apiVersion: v1
+items:
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: aws-load-balancer-controller
+      meta.helm.sh/release-namespace: kube-system
+    creationTimestamp: "2026-05-29T03:35:39Z"
+    labels:
+      app.kubernetes.io/instance: aws-load-balancer-controller
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: aws-load-balancer-controller
+      app.kubernetes.io/version: v3.3.0
+      helm.sh/chart: aws-load-balancer-controller-3.3.0
+    name: aws-load-balancer-controller-leader-election-role
+    namespace: kube-system
+    resourceVersion: "28877"
+    uid: d018e814-ba04-4e8c-9df3-a6412eeee7d8
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - create
+  - apiGroups:
+    - ""
+    resourceNames:
+    - aws-load-balancer-controller-leader
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - patch
+    - update
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+  - apiGroups:
+    - coordination.k8s.io
+    resourceNames:
+    - aws-load-balancer-controller-leader
+    resources:
+    - leases
+    verbs:
+    - get
+    - update
+    - patch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    creationTimestamp: "2026-05-29T02:57:03Z"
+    labels:
+      app.kubernetes.io/component: csi-driver
+      app.kubernetes.io/managed-by: EKS
+      app.kubernetes.io/name: aws-ebs-csi-driver
+      app.kubernetes.io/version: 1.60.0
+    name: ebs-csi-leases-role
+    namespace: kube-system
+    resourceVersion: "15879"
+    uid: 278f34eb-0a2b-486c-9d58-56eed5fd8aac
+  rules:
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - get
+    - watch
+    - list
+    - delete
+    - update
+    - create
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"annotations":{},"name":"eks-vpc-resource-controller-role","namespace":"kube-system"},"rules":[{"apiGroups":["apps"],"resourceNames":["vpc-resource-controller"],"resources":["deployments"],"verbs":["get","list","watch"]},{"apiGroups":[""],"resourceNames":["amazon-vpc-cni"],"resources":["configmaps"],"verbs":["get","list","watch"]},{"apiGroups":[""],"resources":["configmaps"],"verbs":["create","list","watch"]},{"apiGroups":[""],"resourceNames":["cp-vpc-resource-controller"],"resources":["configmaps"],"verbs":["get","update","patch"]},{"apiGroups":[""],"resources":["events"],"verbs":["create"]},{"apiGroups":["coordination.k8s.io"],"resources":["leases"],"verbs":["create"]},{"apiGroups":["coordination.k8s.io"],"resourceNames":["cp-vpc-resource-controller"],"resources":["leases"],"verbs":["get","update"]}]}
+    creationTimestamp: "2026-05-29T01:34:42Z"
+    name: eks-vpc-resource-controller-role
+    namespace: kube-system
+    resourceVersion: "311"
+    uid: e50d1890-2e0c-47d5-80c0-b39b4eba586f
+  rules:
+  - apiGroups:
+    - apps
+    resourceNames:
+    - vpc-resource-controller
+    resources:
+    - deployments
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - amazon-vpc-cni
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - create
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - cp-vpc-resource-controller
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - create
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+  - apiGroups:
+    - coordination.k8s.io
+    resourceNames:
+    - cp-vpc-resource-controller
+    resources:
+    - leases
+    verbs:
+    - get
+    - update
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"annotations":{},"name":"eks:addon-manager","namespace":"kube-system"},"rules":[{"apiGroups":["policy"],"resourceNames":["ebs-csi-controller-pod-disruption-budget","ebs-csi-controller"],"resources":["poddisruptionbudgets"],"verbs":["create","delete","get","list","patch","update","watch"]},{"apiGroups":[""],"resourceNames":["coredns","kube-proxy","kube-proxy-config"],"resources":["configmaps"],"verbs":["create","delete","get","list","patch","update","watch"]},{"apiGroups":["apps"],"resourceNames":["aws-node","kube-proxy","ebs-csi-node","ebs-csi-node-windows"],"resources":["daemonsets"],"verbs":["create","delete","get","list","patch","update","watch"]},{"apiGroups":["apps"],"resourceNames":["coredns","ebs-csi-controller"],"resources":["deployments"],"verbs":["create","delete","get","list","patch","update","watch"]},{"apiGroups":[""],"resourceNames":["kube-dns"],"resources":["services"],"verbs":["create","delete","get","list","patch","update","watch"]},{"apiGroups":[""],"resourceNames":["coredns","aws-node","kube-proxy","ebs-csi-controller-sa","ebs-csi-node-sa"],"resources":["serviceaccounts"],"verbs":["create","delete","get","list","patch","update","watch"]}]}
+    creationTimestamp: "2026-05-29T01:34:40Z"
+    name: eks:addon-manager
+    namespace: kube-system
+    resourceVersion: "282"
+    uid: 4c2125a9-ca72-4b41-832d-13e12f59704c
+  rules:
+  - apiGroups:
+    - policy
+    resourceNames:
+    - ebs-csi-controller-pod-disruption-budget
+    - ebs-csi-controller
+    resources:
+    - poddisruptionbudgets
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - coredns
+    - kube-proxy
+    - kube-proxy-config
+    resources:
+    - configmaps
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - apps
+    resourceNames:
+    - aws-node
+    - kube-proxy
+    - ebs-csi-node
+    - ebs-csi-node-windows
+    resources:
+    - daemonsets
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - apps
+    resourceNames:
+    - coredns
+    - ebs-csi-controller
+    resources:
+    - deployments
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - kube-dns
+    resources:
+    - services
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - coredns
+    - aws-node
+    - kube-proxy
+    - ebs-csi-controller-sa
+    - ebs-csi-node-sa
+    resources:
+    - serviceaccounts
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    creationTimestamp: "2026-05-29T01:34:39Z"
+    name: eks:authenticator
+    namespace: kube-system
+    resourceVersion: "215"
+    uid: 317c69e5-4cb1-477a-a6be-426514e68cea
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - create
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - aws-auth
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - list
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    creationTimestamp: "2026-05-29T01:34:39Z"
+    name: eks:az-poller
+    namespace: kube-system
+    resourceVersion: "220"
+    uid: 828e77a3-5e43-464d-bbbf-318d876cde49
+  rules:
+  - apiGroups:
+    - coordination.k8s.io
+    resourceNames:
+    - kube-controller-manager
+    - kube-scheduler
+    - cloud-controller-manager
+    - eks-certificates-controller
+    - fargate-scheduler
+    - cp-vpc-resource-controller
+    - amazon-network-policy-controller-k8s
+    - eks-coredns-autoscaler
+    - kms-storage-migrator-lease
+    - ebs-csi-eks-amazonaws-com
+    - external-attacher-leader-ebs-csi-eks-amazonaws-com
+    - external-resizer-ebs-csi-eks-amazonaws-com
+    - external-snapshotter-leader-ebs-csi-eks-amazonaws-com
+    - metric-agent-ebs-csi-eks-amazonaws-com
+    - eks-load-balancer-controller-leader
+    - ipam-controller
+    - karpenter-controller
+    resources:
+    - leases
+    verbs:
+    - get
+    - patch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    creationTimestamp: "2026-05-29T01:34:39Z"
+    name: eks:coredns-autoscaler
+    namespace: kube-system
+    resourceVersion: "226"
+    uid: 02ebe7dc-203c-49f3-be2d-1b953d6ba4f2
+  rules:
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+  - apiGroups:
+    - coordination.k8s.io
+    resourceNames:
+    - eks-coredns-autoscaler
+    resources:
+    - leases
+    verbs:
+    - get
+    - update
+    - patch
+  - apiGroups:
+    - apps
+    resourceNames:
+    - coredns
+    resources:
+    - deployments/scale
+    verbs:
+    - get
+    - update
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - create
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - list
+    - get
+    - watch
+  - apiGroups:
+    - metrics.k8s.io
+    resources:
+    - pods
+    verbs:
+    - list
+  - apiGroups:
+    - ""
+    resources:
+    - pods/proxy
+    verbs:
+    - get
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"annotations":{},"name":"eks:fargate-manager","namespace":"kube-system"},"rules":[{"apiGroups":[""],"resourceNames":["aws-auth"],"resources":["configmaps"],"verbs":["get","update","patch","delete"]},{"apiGroups":[""],"resources":["configmaps"],"verbs":["create"]},{"apiGroups":[""],"resources":["events"],"verbs":["get","list"]}]}
+    creationTimestamp: "2026-05-29T01:34:40Z"
+    name: eks:fargate-manager
+    namespace: kube-system
+    resourceVersion: "275"
+    uid: 49d1e503-ed52-41a8-bc36-0f8b145ea83b
+  rules:
+  - apiGroups:
+    - ""
+    resourceNames:
+    - aws-auth
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - create
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - get
+    - list
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"annotations":{},"labels":{"app.kubernetes.io/name":"amazon-network-policy-controller-k8s"},"name":"eks:network-policy-controller","namespace":"kube-system"},"rules":[{"apiGroups":[""],"resourceNames":["amazon-vpc-cni"],"resources":["configmaps"],"verbs":["get","list","watch"]},{"apiGroups":["coordination.k8s.io"],"resources":["leases"],"verbs":["create"]},{"apiGroups":["coordination.k8s.io"],"resourceNames":["amazon-network-policy-controller-k8s"],"resources":["leases"],"verbs":["get","update","patch"]},{"apiGroups":[""],"resources":["events"],"verbs":["create","patch"]}]}
+    creationTimestamp: "2026-05-29T01:34:42Z"
+    labels:
+      app.kubernetes.io/name: amazon-network-policy-controller-k8s
+    name: eks:network-policy-controller
+    namespace: kube-system
+    resourceVersion: "296"
+    uid: aa3e3e61-c116-4260-8867-1f9795337e15
+  rules:
+  - apiGroups:
+    - ""
+    resourceNames:
+    - amazon-vpc-cni
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+  - apiGroups:
+    - coordination.k8s.io
+    resourceNames:
+    - amazon-network-policy-controller-k8s
+    resources:
+    - leases
+    verbs:
+    - get
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - create
+    - patch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"annotations":{},"name":"eks:node-manager","namespace":"kube-system"},"rules":[{"apiGroups":[""],"resourceNames":["aws-auth"],"resources":["configmaps"],"verbs":["get","update","patch"]},{"apiGroups":[""],"resources":["configmaps"],"verbs":["create"]},{"apiGroups":[""],"resources":["events"],"verbs":["get","list"]}]}
+    creationTimestamp: "2026-05-29T01:34:40Z"
+    name: eks:node-manager
+    namespace: kube-system
+    resourceVersion: "266"
+    uid: ac9adc35-7710-480f-965b-9bfebeb9d649
+  rules:
+  - apiGroups:
+    - ""
+    resourceNames:
+    - aws-auth
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - create
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+    - get
+    - list
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    creationTimestamp: "2026-05-29T01:34:39Z"
+    name: eks:service-operations-configmaps
+    namespace: kube-system
+    resourceVersion: "242"
+    uid: ff3eb156-a054-44f3-bbfc-6b4f0d328de6
+  rules:
+  - apiGroups:
+    - ""
+    resourceNames:
+    - coredns
+    - cp-vpc-resource-controller
+    - kube-proxy
+    - kube-proxy-config
+    resources:
+    - configmaps
+    verbs:
+    - get
+  - apiGroups:
+    - ""
+    resourceNames:
+    - aws-auth
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - create
+    - delete
+    - patch
+    - update
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: "2026-05-29T01:34:38Z"
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: extension-apiserver-authentication-reader
+    namespace: kube-system
+    resourceVersion: "195"
+    uid: b30deb94-0fa6-44d5-a0a6-cab949a8a472
+  rules:
+  - apiGroups:
+    - ""
+    resourceNames:
+    - extension-apiserver-authentication
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - list
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: "2026-05-29T01:34:38Z"
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: system::leader-locking-kube-controller-manager
+    namespace: kube-system
+    resourceVersion: "199"
+    uid: 42044c25-60bd-41b9-b974-fcb06cdda909
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - kube-controller-manager
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - update
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leasecandidates
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: "2026-05-29T01:34:38Z"
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: system::leader-locking-kube-scheduler
+    namespace: kube-system
+    resourceVersion: "200"
+    uid: e8f02936-b71a-40d8-9dd8-5d89fc8d7a5f
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - kube-scheduler
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - update
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leasecandidates
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: "2026-05-29T01:34:38Z"
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: system:controller:bootstrap-signer
+    namespace: kube-system
+    resourceVersion: "196"
+    uid: bf095e24-fe18-4b5b-afca-7e397a7a3851
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - secrets
+    verbs:
+    - get
+    - list
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: "2026-05-29T01:34:38Z"
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: system:controller:cloud-provider
+    namespace: kube-system
+    resourceVersion: "197"
+    uid: 082aca11-f149-45cf-acc9-d2346d50e75e
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      rbac.authorization.kubernetes.io/autoupdate: "true"
+    creationTimestamp: "2026-05-29T01:34:38Z"
+    labels:
+      kubernetes.io/bootstrapping: rbac-defaults
+    name: system:controller:token-cleaner
+    namespace: kube-system
+    resourceVersion: "198"
+    uid: 2dbfc634-807c-4e3c-88b3-2037952044c6
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - secrets
+    verbs:
+    - delete
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    - events.k8s.io
+    resources:
+    - events
+    verbs:
+    - create
+    - patch
+    - update
+kind: List
+metadata:
+  resourceVersion: ""

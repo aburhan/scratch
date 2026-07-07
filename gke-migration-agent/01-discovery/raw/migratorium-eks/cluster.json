@@ -1,0 +1,51 @@
+{
+    "name": "migratorium-eks",
+    "version": "1.33",
+    "platformVersion": "eks.39",
+    "endpoint": "https://6B89D09B98B89B355F1826002AED2D48.gr7.us-east-1.eks.amazonaws.com",
+    "publicAccess": true,
+    "privateAccess": true,
+    "vpcId": "vpc-0907eb4d2c8977ffc",
+    "subnetIds": [
+        "subnet-0aadb51a3d3b23a39",
+        "subnet-0bba5f6251c2714eb",
+        "subnet-0c9aa802591e10f21"
+    ],
+    "clusterSGs": "sg-017efad0f728623e1",
+    "additionalSGs": [
+        "sg-00cf2ac368c5d6b44"
+    ],
+    "logging": [
+        {
+            "types": [
+                "api",
+                "audit",
+                "authenticator"
+            ],
+            "enabled": true
+        },
+        {
+            "types": [
+                "controllerManager",
+                "scheduler"
+            ],
+            "enabled": false
+        }
+    ],
+    "encryption": [
+        {
+            "resources": [
+                "secrets"
+            ],
+            "provider": {
+                "keyArn": "arn:aws:kms:us-east-1:162908504356:key/bfd87dbc-7778-496e-afa4-a7137c20266d"
+            }
+        }
+    ],
+    "authenticationMode": "API_AND_CONFIG_MAP",
+    "identity": {
+        "oidc": {
+            "issuer": "https://oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48"
+        }
+    }
+}

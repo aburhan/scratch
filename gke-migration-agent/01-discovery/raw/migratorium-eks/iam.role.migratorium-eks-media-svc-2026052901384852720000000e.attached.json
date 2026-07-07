@@ -1,0 +1,8 @@
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "migratorium-eks-media-svc",
+            "PolicyArn": "arn:aws:iam::162908504356:policy/migratorium-eks-media-svc"
+        }
+    ]
+}

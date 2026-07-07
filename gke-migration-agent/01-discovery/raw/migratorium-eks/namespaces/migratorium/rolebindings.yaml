@@ -1,0 +1,43 @@
+apiVersion: v1
+items:
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"name":"migration-ui","namespace":"migratorium"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"Role","name":"migration-ui"},"subjects":[{"kind":"ServiceAccount","name":"migration-ui","namespace":"migratorium"}]}
+    creationTimestamp: "2026-05-29T04:59:28Z"
+    name: migration-ui
+    namespace: migratorium
+    resourceVersion: "51000"
+    uid: 02a3248a-d5d1-4c45-89b9-c4db45704b32
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: migration-ui
+  subjects:
+  - kind: ServiceAccount
+    name: migration-ui
+    namespace: migratorium
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"name":"report-operator","namespace":"migratorium"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"Role","name":"report-operator"},"subjects":[{"kind":"ServiceAccount","name":"report-operator","namespace":"migratorium"}]}
+    creationTimestamp: "2026-05-29T03:04:38Z"
+    name: report-operator
+    namespace: migratorium
+    resourceVersion: "18768"
+    uid: b4c2c7ab-5d1f-496f-8c49-9a121dcdec67
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: report-operator
+  subjects:
+  - kind: ServiceAccount
+    name: report-operator
+    namespace: migratorium
+kind: List
+metadata:
+  resourceVersion: ""

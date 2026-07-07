@@ -1,0 +1,283 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EKS Discovery Inventory",
+  "description": "Top-level consolidated inventory produced by synthesize-outputs.sh.",
+  "type": "object",
+  "required": ["captured_at", "source_aws", "clusters"],
+  "additionalProperties": false,
+  "properties": {
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "source_aws": {
+      "type": "object",
+      "required": ["accounts", "regions"],
+      "additionalProperties": false,
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "auth_mechanism": {
+          "type": ["string", "null"]
+        },
+        "expected_session_expiry": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "re_auth_command": {
+          "type": ["string", "null"]
+        },
+        "namespace_filter": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "namespaces": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of namespaces in scope, or ['*'] for all."
+            },
+            "exclude_system_namespaces": {
+              "type": "boolean"
+            },
+            "system_namespaces_excluded": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "clusters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "region"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "arn": {
+            "type": ["string", "null"]
+          },
+          "region": {
+            "type": "string"
+          },
+          "account": {
+            "type": ["string", "null"]
+          },
+          "version": {
+            "type": ["string", "null"]
+          },
+          "platform_version": {
+            "type": ["string", "null"]
+          },
+          "status": {
+            "type": ["string", "null"]
+          },
+          "auth_mode": {
+            "type": ["string", "null"]
+          },
+          "oidc_issuer": {
+            "type": ["string", "null"]
+          },
+          "tags": {
+            "type": "object"
+          },
+          "secret_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "irsa_binding_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "node_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "node_pools": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "instance_types",
+                "desired_size",
+                "min_size",
+                "max_size",
+                "capacity_type",
+                "ami_type",
+                "tags",
+                "labels",
+                "taints"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "instance_types": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "desired_size": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "min_size": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "max_size": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "capacity_type": {
+                  "type": "string"
+                },
+                "ami_type": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "object"
+                },
+                "labels": {
+                  "type": "object"
+                },
+                "taints": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["key", "effect"],
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "effect": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "public_access": {
+            "type": "boolean"
+          },
+          "private_access": {
+            "type": "boolean"
+          },
+          "vpc_id": {
+            "type": ["string", "null"]
+          },
+          "subnets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "service_cidr": {
+            "type": ["string", "null"]
+          },
+          "cni_plugin": {
+            "type": ["string", "null"]
+          },
+          "dns_provider": {
+            "type": ["string", "null"]
+          },
+          "external_snat": {
+            "type": "boolean"
+          },
+          "escalations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["category", "code", "message"],
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total_clusters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_irsa_bindings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_secrets": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_nodes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockers_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "escalations": {
+      "type": "array",
+      "description": "Account/region-scoped escalations (e.g. permission-denied on an account-wide query). Cluster-scoped escalations remain on the cluster object.",
+      "items": {
+        "type": "object",
+        "required": ["category", "code", "message"],
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {}
+        }
+      }
+    }
+  }
+}

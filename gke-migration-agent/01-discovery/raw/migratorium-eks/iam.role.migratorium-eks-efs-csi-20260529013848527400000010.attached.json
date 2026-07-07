@@ -1,0 +1,8 @@
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "EFS_CSI-20260529012735506900000006",
+            "PolicyArn": "arn:aws:iam::162908504356:policy/EFS_CSI-20260529012735506900000006"
+        }
+    ]
+}

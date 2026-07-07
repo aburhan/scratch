@@ -1,0 +1,43 @@
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "migratorium-eks-efs-csi-20260529013848527400000010",
+        "RoleId": "AROASL3Q2QESJYW6DQRCX",
+        "Arn": "arn:aws:iam::162908504356:role/migratorium-eks-efs-csi-20260529013848527400000010",
+        "CreateDate": "2026-05-29T01:38:48+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Federated": "arn:aws:iam::162908504356:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48"
+                    },
+                    "Action": "sts:AssumeRoleWithWebIdentity",
+                    "Condition": {
+                        "StringEquals": {
+                            "oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48:sub": "system:serviceaccount:kube-system:efs-csi-controller-sa",
+                            "oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48:aud": "sts.amazonaws.com"
+                        }
+                    }
+                }
+            ]
+        },
+        "MaxSessionDuration": 3600,
+        "Tags": [
+            {
+                "Key": "project",
+                "Value": "migratorium"
+            },
+            {
+                "Key": "purpose",
+                "Value": "portage-migration-torture-test"
+            },
+            {
+                "Key": "environment",
+                "Value": "demo"
+            }
+        ],
+        "RoleLastUsed": {}
+    }
+}

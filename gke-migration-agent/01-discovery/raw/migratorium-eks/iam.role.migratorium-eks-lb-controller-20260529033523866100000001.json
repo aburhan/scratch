@@ -1,0 +1,46 @@
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "migratorium-eks-lb-controller-20260529033523866100000001",
+        "RoleId": "AROASL3Q2QESADQX57YSH",
+        "Arn": "arn:aws:iam::162908504356:role/migratorium-eks-lb-controller-20260529033523866100000001",
+        "CreateDate": "2026-05-29T03:35:23+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Federated": "arn:aws:iam::162908504356:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48"
+                    },
+                    "Action": "sts:AssumeRoleWithWebIdentity",
+                    "Condition": {
+                        "StringEquals": {
+                            "oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48:aud": "sts.amazonaws.com",
+                            "oidc.eks.us-east-1.amazonaws.com/id/6B89D09B98B89B355F1826002AED2D48:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+                        }
+                    }
+                }
+            ]
+        },
+        "MaxSessionDuration": 3600,
+        "Tags": [
+            {
+                "Key": "environment",
+                "Value": "demo"
+            },
+            {
+                "Key": "project",
+                "Value": "migratorium"
+            },
+            {
+                "Key": "purpose",
+                "Value": "portage-migration-torture-test"
+            }
+        ],
+        "RoleLastUsed": {
+            "LastUsedDate": "2026-07-07T17:20:01+00:00",
+            "Region": "us-east-1"
+        }
+    }
+}
