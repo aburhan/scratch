@@ -4,16 +4,6 @@ WIP
 
 ***Technical guidance document template***
 
-[***go/solutions-tgd-template***](http://goto.google.com/solutions-tgd-template)
-
-***Version: 1.0***
-
-***Last updated: Aug 2026***
-
-***Authors: [Ramadevi Bylapudi](mailto:ramadevib@google.com) [Marco Ferrari](mailto:ferrarim@google.com) [Rahul Khandkar](mailto:khandkar@google.com)***
-
-&nbsp;
-
 ***How to use this template***
 
 *Create a copy of this template, and fill it according to the guidance in italics. After filling the template, remove this section and the guidance provided to fill it (i.e. all italicized text).*
